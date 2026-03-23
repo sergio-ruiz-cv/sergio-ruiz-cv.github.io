@@ -1,12 +1,126 @@
 /**
  * Sergio Ruiz Torres - CV Profesional e Interactivo
- * Lógica para Carruseles, Modales y Animaciones UX
+ * Módulos: Modo Oscuro, Gráfico de Radar, Terminal, Filtros y Carruseles
  */
 
 document.addEventListener('DOMContentLoaded', () => {
 
     /* =========================================
-       1. INICIALIZACIÓN DE CARRUSELES (Swiper.js)
+       1. MODO OSCURO (Dark Mode Toggle)
+       ========================================= */
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const themeIcon = themeToggleBtn.querySelector('i');
+    const body = document.body;
+
+    // Revisar si el usuario ya tenía el modo oscuro activado
+    if (localStorage.getItem('theme') === 'dark') {
+        body.setAttribute('data-theme', 'dark');
+        themeIcon.classList.replace('fa-moon', 'fa-sun');
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+        if (body.getAttribute('data-theme') === 'dark') {
+            body.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'light');
+            themeIcon.classList.replace('fa-sun', 'fa-moon');
+        } else {
+            body.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+            themeIcon.classList.replace('fa-moon', 'fa-sun');
+        }
+        
+        // Actualizar el color de los textos del gráfico si es necesario
+        if(window.skillsRadarChart) {
+            window.skillsRadarChart.update();
+        }
+    });
+
+
+    /* =========================================
+       2. EFECTO TYPING EN EL HEADER (Corregido)
+       ========================================= */
+    const titleElement = document.querySelector('.typing-text');
+    if (titleElement) {
+        const textToType = titleElement.textContent; // Usamos textContent para evitar el &amp;
+        titleElement.textContent = ''; 
+        let charIndex = 0;
+
+        function typeWriter() {
+            if (charIndex < textToType.length) {
+                titleElement.textContent += textToType.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeWriter, 40); // Velocidad de escritura
+            }
+        }
+        // Iniciar con un pequeño retraso
+        setTimeout(typeWriter, 500);
+    }
+
+
+    /* =========================================
+       3. GRÁFICO DE RADAR ACTUALIZADO (Data Engineer Focus)
+       ========================================= */
+    const ctx = document.getElementById('skillsChart');
+    if (ctx) {
+        window.skillsRadarChart = new Chart(ctx.getContext('2d'), {
+            type: 'radar',
+            data: {
+                labels: [
+                    'Arquitectura de Datos (ETL/ELT)', 
+                    'Sistemas y BD (SQL/ClickHouse)', 
+                    'Software Dev (Python/JS)', 
+                    'Automatización e IoT', 
+                    'Manufactura Digital (CNC)', 
+                    'Data Viz (Streamlit/PBI)'
+                ],
+                datasets: [{
+                    label: 'Nivel Técnico',
+                    // Valores sugeridos (0 a 100)
+                    data: [80, 85, 95, 90, 85, 75], 
+                    backgroundColor: 'rgba(37, 99, 235, 0.2)',
+                    borderColor: '#2563eb',
+                    pointBackgroundColor: '#2563eb',
+                    pointBorderColor: '#ffffff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: 'rgba(128, 128, 128, 0.2)' },
+                        grid: { color: 'rgba(128, 128, 128, 0.2)' },
+                        suggestedMin: 0,
+                        suggestedMax: 100,
+                        pointLabels: {
+                            font: { 
+                                family: 'Inter', 
+                                size: window.innerWidth < 600 ? 10 : 12, 
+                                weight: '600' 
+                            },
+                            color: '#888888'
+                        },
+                        ticks: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                        callbacks: {
+                            label: function(context) {
+                                return ` Dominio: ${context.raw}%`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    /* =========================================
+       4. INICIALIZACIÓN DE CARRUSELES (Swiper.js)
        ========================================= */
     const projectSwipers = document.querySelectorAll('.projectSwiper');
 
@@ -16,7 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
             grabCursor: true,
             spaceBetween: 15,
             
-            // Paginación y Navegación local para cada tarjeta
             pagination: {
                 el: element.querySelector('.swiper-pagination'),
                 clickable: true,
@@ -27,14 +140,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 prevEl: element.querySelector('.swiper-button-prev'),
             },
             
-            // Autoplay suave que se detiene al poner el mouse encima
             autoplay: {
                 delay: 4500,
                 pauseOnMouseEnter: true,
                 disableOnInteraction: false,
             },
 
-            // Efecto de transición
             effect: "slide",
             speed: 600,
         });
@@ -42,71 +153,91 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     /* =========================================
-       2. LÓGICA DE VENTANA MODAL (Diagrama de Datos)
-       ========================================= */
-    const modal = document.getElementById("dataModal");
-    const trigger = document.getElementById("openDataModal");
-    const closeBtn = document.querySelector(".close-modal");
-
-    if (trigger && modal) {
-        // Abrir el diagrama
-        trigger.addEventListener('click', () => {
-            modal.style.display = "block";
-            modal.style.opacity = "0";
-            document.body.style.overflow = "hidden"; // Bloquea scroll del fondo
-            
-            // Animación de entrada sutil
-            setTimeout(() => {
-                modal.style.opacity = "1";
-                modal.style.transition = "opacity 0.3s ease";
-            }, 10);
-        });
-
-        // Función para cerrar
-        const closeModal = () => {
-            modal.style.display = "none";
-            document.body.style.overflow = "auto";
-        };
-
-        if (closeBtn) closeBtn.onclick = closeModal;
-
-        // Cerrar al hacer clic fuera de la imagen
-        window.onclick = (event) => {
-            if (event.target == modal) closeModal();
-        };
-
-        // Cerrar con la tecla Escape
-        document.addEventListener('keydown', (e) => {
-            if (e.key === "Escape" && modal.style.display === "block") closeModal();
-        });
-    }
-
-
-    /* =========================================
-       3. ANIMACIÓN DE FLECHAS (Experiencia)
+       5. ANIMACIÓN DE FLECHAS (Experiencia)
        ========================================= */
     const detailElements = document.querySelectorAll('.exp-card');
 
     detailElements.forEach(details => {
         details.addEventListener('toggle', () => {
             const arrow = details.querySelector('.icon-arrow');
-            if (details.open) {
-                arrow.style.transform = 'rotate(180deg)';
-                arrow.style.color = 'var(--primary)';
-            } else {
-                arrow.style.transform = 'rotate(0deg)';
-                arrow.style.color = 'var(--text-muted)';
+            if (arrow) {
+                if (details.open) {
+                    arrow.style.transform = 'rotate(180deg)';
+                    arrow.style.color = 'var(--primary)';
+                } else {
+                    arrow.style.transform = 'rotate(0deg)';
+                    arrow.style.color = 'var(--text-muted)';
+                }
             }
         });
     });
 
 
     /* =========================================
-       4. LOG DE CONSOLA (Para Debugging)
+       6. LÓGICA DE LA TERMINAL INTERACTIVA
        ========================================= */
-    console.log("-----------------------------------------");
-    console.log("⚡ CV Sergio Ruiz Torres inicializado");
-    console.log(`🚀 Proyectos con carrusel: ${projectSwipers.length}`);
-    console.log("-----------------------------------------");
+    const tInput = document.getElementById('terminalInput');
+    const tOutput = document.getElementById('terminalOutput');
+
+    if (tInput && tOutput) {
+        const commands = {
+            'help': 'Comandos: info, data, cnc, clear',
+            'info': 'Sergio Ruiz | Ing. Civil Electrónica | Buscando primera oportunidad en Datos.',
+            'data': 'Pipelines ETL con Python y Dagster. BD: ClickHouse, SQL.',
+            'cnc': 'Diseño y ensamblaje de Router CNC 3x2m. Modelado en Fusion 360 y control Mach3.',
+            'clear': ''
+        };
+
+        tInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const cmd = tInput.value.toLowerCase().trim();
+                const line = document.createElement('p');
+                line.className = 'terminal-line';
+                
+                if (cmd === 'clear') {
+                    tOutput.innerHTML = '';
+                } else if (commands[cmd]) {
+                    line.innerHTML = `<span style="color: #fff">>>> ${cmd}</span><br>${commands[cmd]}`;
+                    tOutput.appendChild(line);
+                } else if (cmd !== "") {
+                    line.innerHTML = `<span style="color: #ff5f56">>>> Comando '${cmd}' no reconocido. Prueba 'help'.</span>`;
+                    tOutput.appendChild(line);
+                }
+                
+                tInput.value = '';
+                tOutput.scrollTop = tOutput.scrollHeight;
+            }
+        });
+    }
+
+
+    /* =========================================
+       7. FILTRADO DINÁMICO DE SKILLS
+       ========================================= */
+    const skillInput = document.getElementById('skillInput');
+    const skillSpans = document.querySelectorAll('.tags span');
+
+    if (skillInput) {
+        skillInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            
+            skillSpans.forEach(span => {
+                const skillText = span.textContent.toLowerCase();
+                
+                if (skillText.includes(searchTerm) || searchTerm === "") {
+                    span.style.display = "inline-block";
+                    if (searchTerm !== "") {
+                        span.style.backgroundColor = "var(--primary)";
+                        span.style.color = "#ffffff";
+                    } else {
+                        span.style.backgroundColor = ""; // Reset inline style
+                        span.style.color = "";
+                    }
+                } else {
+                    span.style.display = "none";
+                }
+            });
+        });
+    }
 
 });

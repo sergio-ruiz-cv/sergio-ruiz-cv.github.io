@@ -7,19 +7,24 @@
     
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>⚡</text></svg>">
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <button id="theme-toggle" class="theme-btn-floating" title="Cambiar Tema">
+        <i class="fa-solid fa-moon"></i>
+    </button>
+
     <header>
         <div class="container">
             <h1>Sergio Ruiz Torres</h1>
-            <p class="subtitle">Ingeniería Civil Electrónica | Data Engineer Junior | Fundador de S&F Atelier</p>
+            <p class="subtitle typing-text">Ingeniería Civil Electrónica | Data Engineer Junior | Fundador de S&F Atelier</p>
             
             <div class="contact-icons">
                 <a href="mailto:sergio.r.a.ruiz.t@gmail.com" title="Enviar Email">
@@ -37,6 +42,24 @@
         <section id="about">
             <h2>Perfil Profesional</h2>
             <p>Estudiante de Ingeniería Civil Electrónica con sólida base técnica en hardware y automatización, actualmente especializándose en <strong>Data Engineering.</strong> Cuento con experiencia práctica en la resolución de problemas complejos, desde la reparación de sistemas electrónicos hasta la creación de una empresa de diseño digital <strong>S&F Atelier.</strong> Mi enfoque combina la precisión de la electrónica con el manejo de flujos de datos, buscando mi primera oportunidad profesional en el área de datos para aplicar conocimientos en Python, SQL y procesos ETL.</p>
+        </section>
+
+        <section id="terminal-section">
+            <div class="terminal-window">
+                <div class="terminal-header">
+                    <div class="btns">
+                        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                    </div>
+                    <span class="terminal-title">sergio_cv.py</span>
+                </div>
+                <div class="terminal-body" id="terminalOutput">
+                    <p class="terminal-line">> Sistema inicializado. Escribe 'help' para ver opciones...</p>
+                </div>
+                <div class="terminal-input-line">
+                    <span class="prompt">>>></span>
+                    <input type="text" id="terminalInput" autocomplete="off" autofocus>
+                </div>
+            </div>
         </section>
 
         <section id="experience">
@@ -66,7 +89,7 @@
             <details class="exp-card">
                 <summary>
                     <div class="summary-content">
-                        <img src="assets/andes_hosting.jpg" alt="Data" class="mini-logo">
+                        <img src="assets/andes_hosting.jpg" alt="Data" class="mini-logo" onerror="this.src='https://via.placeholder.com/50'">
                         <div class="summary-text">
                             <h3>Data Engineer Junior</h3>
                             <span class="location">Valparaíso / Remoto</span>
@@ -87,7 +110,7 @@
             <details class="exp-card">
                 <summary>
                     <div class="summary-content">
-                        <img src="assets/adexus.png" alt="Adexus" class="mini-logo">
+                        <img src="assets/adexus.png" alt="Adexus" class="mini-logo" onerror="this.src='https://via.placeholder.com/50'">
                         <div class="summary-text">
                             <h3>Instalador de Equipos Transbank | Adexus</h3>
                             <span class="location">Viña del Mar / Valparaíso</span>
@@ -121,9 +144,10 @@
                         <strong>Voluntariado | Iluminando Chile</strong>
                         <span class="small-date">Proyectos de Emergencia</span>
                     </div>
-                    <p>Ejecución de instalaciones eléctricas seguras y dignas en sectores vulnerables. Mi labor se enfoca en combatir la precariedad energética mediante sistemas normalizados, garantizando que familias de escasos recursos cuenten con un servicio eléctrico confiable y de calidad.</p>
+                    <p>Ejecución de instalaciones eléctricas seguras y dignas en sectores vulnerables. Mi labor se enfoca en combatir la precariedad energética mediante sistemas normalizados.</p>
                 </div>
             </div>
+        </section>
 
         <section id="projects">
             <h2>Portafolio de Proyectos</h2>
@@ -136,7 +160,7 @@
                                 <img src="assets/prototipo.png" alt="Diseño CNC" onerror="this.src='https://via.placeholder.com/600x400?text=Foto+1+CNC'">
                             </div>
                             <div class="swiper-slide">
-                                <img src="assets/Pagina web.png" alt="Armado CNC" onerror="this.src='https://via.placeholder.com/600x400?text=Foto+2+CNC'">
+                                <img src="assets/carrocnc.jpeg" alt="Armado CNC" onerror="this.src='https://via.placeholder.com/600x400?text=Foto+2+CNC'">
                             </div>
                             <div class="swiper-slide">
                                 <div class="project-card-carousel">
@@ -176,32 +200,92 @@
                     </div>
                 </div>
 
+                <div class="project-item">
+                    <div class="browser-mockup">
+                        <div class="browser-header">
+                            <div class="btns">
+                                <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                            </div>
+                            <div class="browser-url">https://syfatelier.cl</div> 
+                        </div>
+                        
+                        <div class="swiper projectSwiper">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <img src="assets/page.png" alt="Diseño Web Preview 1" onerror="this.src='https://via.placeholder.com/800x500?text=Captura+Web+1'">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="assets/page 2.png" alt="Diseño Web Preview 2" onerror="this.src='https://via.placeholder.com/800x500?text=Captura+Web+2'">
+                                </div>
+                            </div>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+
+                    <div class="project-info-card">
+                        <h3>Desarrollo Frontend E-commerce</h3>
+                        <p>Diseño e implementación de interfaz web responsiva. Optimización de tiempos de carga, animaciones CSS y estructuración semántica para mejorar el SEO y la experiencia de usuario (UX/UI).</p>
+                        <div class="tags">
+                            <span>HTML5/CSS3</span> 
+                            <span>JavaScript</span> 
+                            <span>UI/UX</span>
+                        </div>
+                        
+                        <div class="project-links">
+                            <a href="https://github.com/syf-atelier/syf-atelier.github.io" target="_blank" class="btn-outline">
+                                <i class="fa-brands fa-github"></i> Código
+                            </a>
+                            <a href="https://syf-atelier.github.io/" target="_blank" class="btn-primary">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Demo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
 
         <section id="skills">
-            <h2>Habilidades Técnicas</h2>
+            <div class="section-header-skills">
+                <h2>Habilidades Técnicas</h2>
+                <div class="search-container">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="skillInput" placeholder="Filtra (ej: Python, CNC)...">
+                </div>
+            </div>
+
+            <div class="chart-wrapper">
+                <canvas id="skillsChart"></canvas>
+            </div>
+            
             <div class="skills-grid">
                 <div class="skill-category">
                     <h3><i class="fa-solid fa-code"></i> Software & Data</h3>
-                    <div class="tags">
-                        <span>Python</span>
+                    <div class="tags" id="tags-software">
+                        <span>Python (Pandas, Numpy)</span>
                         <span>SQL</span>
-                        <span>Power BI/Streamlit</span>
+                        <span>Power BI</span>
+                        <span>Streamlit</span>
                         <span>JavaScript</span>
                         <span>GitHub</span>
-                        </div>
+                        <span>Dagster</span>
+                        <span>ClickHouse</span>
+                    </div>
                 </div>
 
                 <div class="skill-category">
                     <h3><i class="fa-solid fa-microchip"></i> Hardware & Fab</h3>
-                    <div class="tags">
+                    <div class="tags" id="tags-hardware">
                         <span>Fusion 360</span>
                         <span>CNC Machining</span>
                         <span>SketchUp</span>
                         <span>AutoCAD</span>
-                        </div>
+                        <span>Mach3</span>
+                    </div>
                 </div>
+            </div>
         </section>
 
         <section id="education">
@@ -226,41 +310,40 @@
 
     </main>
 
-        <footer class="main-footer">
-            <div class="container footer-grid">
-                <div class="footer-brand">
-                    <span class="footer-logo">🧑🏽‍💻 Sergio Ruiz Torres</span>
-                    <p>Ingeniería Civil Electrónica & Data Engineering. Construyendo soluciones donde el hardware y el software convergen.</p>
-                </div>
-
-                <div class="footer-links">
-                    <h4>Navegación</h4>
-                    <ul>
-                        <li><a href="#about">Perfil</a></li>
-                        <li><a href="#experience">Experiencia</a></li>
-                        <li><a href="#projects">Portafolio</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-tech">
-                    <h4>Tech Stack</h4>
-                    <div class="tech-icons-mini">
-                        <i class="fa-brands fa-html5" title="HTML5"></i>
-                        <i class="fa-brands fa-css3-alt" title="CSS3"></i>
-                        <i class="fa-brands fa-js" title="JavaScript"></i>
-                        <i class="fa-brands fa-github" title="GitHub Pages"></i>
-                    </div>
-                    <p>Desplegado en GitHub Pages © 2026</p>
-                </div>
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <span class="footer-logo">🧑🏽‍💻 Sergio Ruiz Torres</span>
+                <p>Ingeniería Civil Electrónica & Data Engineering. Construyendo soluciones donde el hardware y el software convergen.</p>
             </div>
-            
-            <div class="footer-bottom">
-                <p>© 2026 <a href="https://linktr.ee/SyF_Atelier" target="_blank" class="footer-brand-link">S&F ATELIER</a>. Todos los derechos reservados.</p>
+
+            <div class="footer-links">
+                <h4>Navegación</h4>
+                <ul>
+                    <li><a href="#about">Perfil</a></li>
+                    <li><a href="#experience">Experiencia</a></li>
+                    <li><a href="#projects">Portafolio</a></li>
+                </ul>
             </div>
-        </footer>
+
+            <div class="footer-tech">
+                <h4>Tech Stack</h4>
+                <div class="tech-icons-mini">
+                    <i class="fa-brands fa-html5" title="HTML5"></i>
+                    <i class="fa-brands fa-css3-alt" title="CSS3"></i>
+                    <i class="fa-brands fa-js" title="JavaScript"></i>
+                    <i class="fa-brands fa-github" title="GitHub Pages"></i>
+                </div>
+                <p>Desplegado en GitHub Pages © 2026</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2026 <a href="https://linktr.ee/SyF_Atelier" target="_blank" class="footer-brand-link">S&F ATELIER</a>. Todos los derechos reservados.</p>
+        </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    
     <script src="script.js"></script>
 
 </body>
