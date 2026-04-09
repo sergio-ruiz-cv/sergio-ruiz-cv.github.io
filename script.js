@@ -1,35 +1,61 @@
 /**
  * Sergio Ruiz Torres - CV Profesional e Interactivo
- * Módulos: Modo Oscuro, Gráfico de Radar, Engineering Terminal, Carruseles y UX
+ * Módulos: Menú FAB, Modo Oscuro, Typing, Radar, Swiper, Terminal y Filtros
  */
 
 document.addEventListener('DOMContentLoaded', () => {
 
     /* =========================================
-       1. MODO OSCURO (Dark Mode Toggle)
+       1. LÓGICA DEL MENÚ FLOTANTE (FAB) & MODO OSCURO
        ========================================= */
+    const fabContainer = document.getElementById('fab-container');
+    const fabMainBtn = document.getElementById('fab-main-btn');
     const themeToggleBtn = document.getElementById('theme-toggle');
-    const themeIcon = themeToggleBtn.querySelector('i');
+    const themeIcon = themeToggleBtn ? themeToggleBtn.querySelector('i') : null;
     const body = document.body;
 
-    if (localStorage.getItem('theme') === 'dark') {
-        body.setAttribute('data-theme', 'dark');
-        themeIcon.classList.replace('fa-moon', 'fa-sun');
+    // A) Toggle del menú
+    if (fabMainBtn && fabContainer) {
+        fabMainBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); 
+            fabContainer.classList.toggle('active');
+        });
+
+        // B) Cerrar menú al hacer clic fuera
+        document.addEventListener('click', (e) => {
+            if (fabContainer.classList.contains('active') && !fabContainer.contains(e.target)) {
+                fabContainer.classList.remove('active');
+            }
+        });
     }
 
-    themeToggleBtn.addEventListener('click', () => {
-        if (body.getAttribute('data-theme') === 'dark') {
-            body.removeAttribute('data-theme');
-            localStorage.setItem('theme', 'light');
-            themeIcon.classList.replace('fa-sun', 'fa-moon');
-        } else {
-            body.setAttribute('data-theme', 'dark');
-            localStorage.setItem('theme', 'dark');
-            themeIcon.classList.replace('fa-moon', 'fa-sun');
-        }
-        if(window.skillsRadarChart) { window.skillsRadarChart.update(); }
-    });
+    // C) Cambio de Tema (Modo Oscuro)
+    if (localStorage.getItem('theme') === 'dark') {
+        body.setAttribute('data-theme', 'dark');
+        if (themeIcon) themeIcon.classList.replace('fa-palette', 'fa-sun'); 
+    } else {
+        if (themeIcon) themeIcon.classList.replace('fa-palette', 'fa-moon'); 
+    }
 
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            if (fabContainer) fabContainer.classList.remove('active');
+
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                if (themeIcon) themeIcon.classList.replace('fa-sun', 'fa-moon');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                if (themeIcon) themeIcon.classList.replace('fa-moon', 'fa-sun');
+            }
+            
+            if(window.skillsRadarChart) {
+                window.skillsRadarChart.update();
+            }
+        });
+    }
 
     /* =========================================
        2. EFECTO TYPING EN EL HEADER (Fix &amp;)
@@ -49,7 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         setTimeout(typeWriter, 300);
     }
-
 
     /* =========================================
        3. GRÁFICO DE RADAR (Foco Data Engineer)
@@ -98,9 +123,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-
     /* =========================================
-       4. INICIALIZACIÓN DE CARRUSELES
+       4. INICIALIZACIÓN DE CARRUSELES (Swiper)
        ========================================= */
     const projectSwipers = document.querySelectorAll('.projectSwiper');
     projectSwipers.forEach((element) => {
@@ -119,7 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
             speed: 600,
         });
     });
-
 
     /* =========================================
        5. LÓGICA DE LA TERMINAL: ENGINEERING LOGS
@@ -167,7 +190,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
 
     /* =========================================
        6. FILTRADO DINÁMICO DE SKILLS

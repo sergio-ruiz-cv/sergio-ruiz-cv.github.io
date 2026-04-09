@@ -17,9 +17,30 @@
 </head>
 <body>
 
-    <button id="theme-toggle" class="theme-btn-floating" title="Cambiar Tema">
-        <i class="fa-solid fa-moon"></i>
-    </button>
+        <div class="fab-container" id="fab-container">
+        
+        <div class="fab-options">
+            
+            <div class="fab-group">
+                <span class="fab-label">Descargar CV</span>
+                <a href="https://drive.google.com/file/d/1NDOqKUCmoFVi_YYTsdD74cB_z7mcjdmE/view?usp=drive_link" target="_blank" class="fab-item" id="download-pdf" title="Descargar PDF">
+                    <i class="fa-solid fa-file-pdf"></i>
+                </a>
+            </div>
+
+            <div class="fab-group">
+                <span class="fab-label">Cambiar Tema</span>
+                <button class="fab-item" id="theme-toggle" title="Cambiar Tema">
+                    <i class="fa-solid fa-palette"></i>
+                </button>
+            </div>
+            
+        </div>
+
+        <button class="fab-main" id="fab-main-btn" title="Menú de acciones">
+            <i class="fa-solid fa-plus" id="fab-icon"></i>
+        </button>
+         </div>
 
     <header>
         <div class="container">
