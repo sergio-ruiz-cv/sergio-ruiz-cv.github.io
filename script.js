@@ -1,6 +1,6 @@
 /**
  * Sergio Ruiz Torres - CV Profesional e Interactivo
- * Módulos: Modo Oscuro, Gráfico de Radar, Terminal, Filtros, Carruseles y UX Móvil
+ * Módulos: Modo Oscuro, Gráfico de Radar, Engineering Terminal, Carruseles y UX
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeIcon = themeToggleBtn.querySelector('i');
     const body = document.body;
 
-    // Revisar si el usuario ya tenía el modo oscuro activado
     if (localStorage.getItem('theme') === 'dark') {
         body.setAttribute('data-theme', 'dark');
         themeIcon.classList.replace('fa-moon', 'fa-sun');
@@ -28,39 +27,32 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('theme', 'dark');
             themeIcon.classList.replace('fa-moon', 'fa-sun');
         }
-        
-        // Actualizar el gráfico si existe
-        if(window.skillsRadarChart) {
-            window.skillsRadarChart.update();
-        }
+        if(window.skillsRadarChart) { window.skillsRadarChart.update(); }
     });
 
 
     /* =========================================
-       2. EFECTO TYPING EN EL HEADER (Fijado &amp;)
+       2. EFECTO TYPING EN EL HEADER (Fix &amp;)
        ========================================= */
     const titleElement = document.querySelector('.typing-text');
     if (titleElement) {
-        // CORRECCIÓN: Leemos textContent (texto puro) para que el símbolo '&' no se transforme en '&amp;'
         const textToType = titleElement.textContent.trim(); 
-        titleElement.textContent = ''; // Limpiamos para iniciar animación
+        titleElement.textContent = ''; 
         let charIndex = 0;
 
         function typeWriter() {
             if (charIndex < textToType.length) {
-                // Forzamos texto puro para asegurar que el símbolo '&' se imprima bien
                 titleElement.textContent += textToType.charAt(charIndex);
                 charIndex++;
-                setTimeout(typeWriter, 40); // Velocidad de escritura
+                setTimeout(typeWriter, 40);
             }
         }
-        // Iniciar con un pequeño retraso para asegurar que la página cargó
         setTimeout(typeWriter, 300);
     }
 
 
     /* =========================================
-       3. GRÁFICO DE RADAR ACTUALIZADO (Data Engineer Focus)
+       3. GRÁFICO DE RADAR (Foco Data Engineer)
        ========================================= */
     const ctx = document.getElementById('skillsChart');
     if (ctx) {
@@ -95,64 +87,34 @@ document.addEventListener('DOMContentLoaded', () => {
                         suggestedMin: 0,
                         suggestedMax: 100,
                         pointLabels: {
-                            font: { 
-                                family: 'Inter', 
-                                // Ajuste de fuente dinámico para labels del gráfico
-                                size: window.innerWidth < 600 ? 10 : 12, 
-                                weight: '600' 
-                            },
+                            font: { family: 'Inter', size: window.innerWidth < 600 ? 10 : 12, weight: '600' },
                             color: '#888888'
                         },
                         ticks: { display: false }
                     }
                 },
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
-                        callbacks: {
-                            label: function(context) {
-                                return ` Dominio: ${context.raw}%`;
-                            }
-                        }
-                    }
-                }
+                plugins: { legend: { display: false } }
             }
         });
     }
 
 
     /* =========================================
-       4. INICIALIZACIÓN DE CARRUSELES (Swiper.js)
+       4. INICIALIZACIÓN DE CARRUSELES
        ========================================= */
     const projectSwipers = document.querySelectorAll('.projectSwiper');
-
     projectSwipers.forEach((element) => {
         new Swiper(element, {
             loop: true,
             grabCursor: true,
-            spaceBetween: 10, // Espacio entre slides
-            
-            // CORRECCIÓN #4: autoHeight es clave. 
-            // La tarjeta crecerá o encogerá dinámicamente según la altura de la imagen actual.
             autoHeight: true, 
-            
-            pagination: {
-                el: element.querySelector('.swiper-pagination'),
-                clickable: true,
-                dynamicBullets: true,
-            },
+            spaceBetween: 10,
+            pagination: { el: element.querySelector('.swiper-pagination'), clickable: true, dynamicBullets: true },
             navigation: {
                 nextEl: element.querySelector('.swiper-button-next'),
                 prevEl: element.querySelector('.swiper-button-prev'),
             },
-            
-            autoplay: {
-                delay: 4500,
-                pauseOnMouseEnter: true,
-                disableOnInteraction: false,
-            },
-
+            autoplay: { delay: 4500, pauseOnMouseEnter: true, disableOnInteraction: false },
             effect: "slide",
             speed: 600,
         });
@@ -160,38 +122,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     /* =========================================
-       5. ANIMACIÓN DE FLECHAS (Experiencia)
-       ========================================= */
-    const detailElements = document.querySelectorAll('.exp-card');
-
-    detailElements.forEach(details => {
-        details.addEventListener('toggle', () => {
-            const arrow = details.querySelector('.icon-arrow');
-            if (arrow) {
-                if (details.open) {
-                    arrow.style.transform = 'rotate(180deg)';
-                    arrow.style.color = 'var(--primary)';
-                } else {
-                    arrow.style.transform = 'rotate(0deg)';
-                    arrow.style.color = 'var(--text-muted)';
-                }
-            }
-        });
-    });
-
-
-    /* =========================================
-       6. LÓGICA DE LA TERMINAL INTERACTIVA
+       5. LÓGICA DE LA TERMINAL: ENGINEERING LOGS
        ========================================= */
     const tInput = document.getElementById('terminalInput');
     const tOutput = document.getElementById('terminalOutput');
 
     if (tInput && tOutput) {
         const commands = {
-            'help': 'Comandos: info, data, cnc, clear',
-            'info': 'Sergio Ruiz | Ing. Civil Electrónica | Buscando primera oportunidad en Datos.',
-            'data': 'Pipelines ETL con Python y Dagster. BD: ClickHouse, SQL.',
-            'cnc': 'Diseño y ensamblaje de Router CNC 3x2m. Modelado en Fusion 360 y control Mach3.',
+            'help': 'Comandos: status, stack, run-pipeline, clear, contact',
+            'status': '🟢 System: Online | ETL_Worker: Idle | CNC_Link: Connected | DB_ClickHouse: Ready',
+            'stack': 'Core Tech: Python 3.11, SQL, Dagster (Orchestration), ClickHouse, Fusion 360, JavaScript.',
+            'contact': 'sergio.r.a.ruiz.t@gmail.com | LinkedIn: sergio-ruiz-torres-engineer',
             'clear': ''
         };
 
@@ -203,11 +144,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (cmd === 'clear') {
                     tOutput.innerHTML = '';
-                } else if (commands[cmd]) {
-                    line.innerHTML = `<span style="color: #fff">>>> ${cmd}</span><br>${commands[cmd]}`;
+                } 
+                else if (cmd === 'run-pipeline') {
+                    line.innerHTML = `<span style="color: #3b82f6">>>> ${cmd}</span><br>
+                    [INFO] Iniciando Pipeline de Datos de Sergio...<br>
+                    [INFO] Extrayendo datos de S&F Atelier API (CNC Logs)...<br>
+                    [INFO] Transformando: Limpieza de nulos y normalización de esquemas...<br>
+                    [SUCCESS] 128,450 filas cargadas en ClickHouse Data Warehouse exitosamente.`;
                     tOutput.appendChild(line);
-                } else if (cmd !== "") {
-                    line.innerHTML = `<span style="color: #ff5f56">>>> Comando '${cmd}' no reconocido. Prueba 'help'.</span>`;
+                }
+                else if (commands[cmd]) {
+                    line.innerHTML = `<span style="color: #3b82f6">>>> ${cmd}</span><br>${commands[cmd]}`;
+                    tOutput.appendChild(line);
+                } 
+                else if (cmd !== "") {
+                    line.innerHTML = `<span style="color: #ff5f56">>>> Comando '${cmd}' no reconocido. Prueba 'status' o 'run-pipeline'.</span>`;
                     tOutput.appendChild(line);
                 }
                 
@@ -219,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     /* =========================================
-       7. FILTRADO DINÁMICO DE SKILLS
+       6. FILTRADO DINÁMICO DE SKILLS
        ========================================= */
     const skillInput = document.getElementById('skillInput');
     const skillSpans = document.querySelectorAll('.tags span');
@@ -227,17 +178,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (skillInput) {
         skillInput.addEventListener('input', (e) => {
             const searchTerm = e.target.value.toLowerCase().trim();
-            
             skillSpans.forEach(span => {
                 const skillText = span.textContent.toLowerCase();
-                
                 if (skillText.includes(searchTerm) || searchTerm === "") {
                     span.style.display = "inline-block";
                     if (searchTerm !== "") {
                         span.style.backgroundColor = "var(--primary)";
                         span.style.color = "#ffffff";
                     } else {
-                        span.style.backgroundColor = ""; // Reset inline style
+                        span.style.backgroundColor = "";
                         span.style.color = "";
                     }
                 } else {
@@ -246,5 +195,19 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    /* =========================================
+       7. ANIMACIÓN DE FLECHAS (Experiencia)
+       ========================================= */
+    const detailElements = document.querySelectorAll('.exp-card');
+    detailElements.forEach(details => {
+        details.addEventListener('toggle', () => {
+            const arrow = details.querySelector('.icon-arrow');
+            if (arrow) {
+                arrow.style.transform = details.open ? 'rotate(180deg)' : 'rotate(0deg)';
+                arrow.style.color = details.open ? 'var(--primary)' : 'var(--text-muted)';
+            }
+        });
+    });
 
 });
