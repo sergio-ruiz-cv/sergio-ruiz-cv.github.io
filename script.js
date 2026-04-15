@@ -198,7 +198,6 @@ document.addEventListener('DOMContentLoaded', () => {
             loop: true, autoHeight: true, spaceBetween: 10,
             pagination: { el: element.querySelector('.swiper-pagination'), clickable: true },
             navigation: { nextEl: element.querySelector('.swiper-button-next'), prevEl: element.querySelector('.swiper-button-prev') },
-            autoplay: { delay: 4500, pauseOnMouseEnter: true }
         });
     });
 
