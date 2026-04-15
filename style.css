@@ -372,6 +372,7 @@ details[open] .icon-arrow { transform: rotate(180deg); color: var(--primary); }
 }
 
 /* El "Dato" que se mueve */
+/* El "Dato" que se mueve */
 .data-dot {
     position: absolute;
     width: 12px;
@@ -383,7 +384,7 @@ details[open] .icon-arrow { transform: rotate(180deg); color: var(--primary); }
     z-index: 3;
     transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     left: 0;
-    top: 50%;
+    top: 0; /* CORRECCIÓN: Ahora inicia desde arriba para calcular con precisión */
 }
 
 .pipeline-console {
@@ -399,4 +400,13 @@ details[open] .icon-arrow { transform: rotate(180deg); color: var(--primary); }
 
 .pipeline-console p {
     margin: 0 0 5px 0;
+}
+@media (max-width: 600px) {
+    .pipeline-graph {
+        justify-content: center; /* Centra los iconos en móvil */
+        gap: 15px;
+    }
+    .node-arrow {
+        display: none; /* Ocultamos las flechas en pantallas pequeñas para que parezca una cuadrícula limpia */
+    }
 }
