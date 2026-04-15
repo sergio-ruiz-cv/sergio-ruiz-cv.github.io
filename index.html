@@ -6,46 +6,77 @@
     <title>Sergio Ruiz Torres | CV Profesional</title>
     
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>⚡</text></svg>">
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-        <div class="fab-container" id="fab-container">
+    <button class="fab-main" id="settings-btn" title="Abrir Panel de Control">
+        <i class="fa-solid fa-sliders"></i>
+    </button>
+
+    <div class="settings-overlay" id="settings-overlay"></div>
+
+    <aside class="settings-panel" id="settings-panel">
+        <div class="settings-header">
+            <h3 data-i18n="settings_title"><i class="fa-solid fa-gear"></i> Panel de Control</h3>
+            <button id="close-settings" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
         
-        <div class="fab-options">
-            
-            <div class="fab-group">
-                <span class="fab-label">Descargar CV</span>
-                <a href="https://drive.google.com/file/d/1NDOqKUCmoFVi_YYTsdD74cB_z7mcjdmE/view?usp=drive_link" target="_blank" class="fab-item" id="download-pdf" title="Descargar PDF">
-                    <i class="fa-solid fa-file-pdf"></i>
+        <div class="settings-content">
+            <div class="settings-section">
+                <a href="https://drive.google.com/file/d/1NDOqKUCmoFVi_YYTsdD74cB_z7mcjdmE/view?usp=drive_link" target="_blank" class="download-btn-full">
+                    <i class="fa-solid fa-file-pdf"></i> <span data-i18n="download_cv">Descargar CV en PDF</span>
                 </a>
             </div>
 
-            <div class="fab-group">
-                <span class="fab-label">Cambiar Tema</span>
-                <button class="fab-item" id="theme-toggle" title="Cambiar Tema">
-                    <i class="fa-solid fa-palette"></i>
-                </button>
+            <div class="settings-section">
+                <h4 data-i18n="theme">Apariencia</h4>
+                <div class="toggle-container">
+                    <span data-i18n="light">Claro</span>
+                    <label class="switch">
+                        <input type="checkbox" id="theme-toggle-switch">
+                        <span class="slider round"></span>
+                    </label>
+                    <span data-i18n="dark">Oscuro</span>
+                </div>
             </div>
-            
-        </div>
 
-        <button class="fab-main" id="fab-main-btn" title="Menú de acciones">
-            <i class="fa-solid fa-plus" id="fab-icon"></i>
-        </button>
-         </div>
+            <div class="settings-section">
+                <h4 data-i18n="language">Idioma</h4>
+                <div class="btn-group">
+                    <button class="btn-option active" id="lang-es">ES</button>
+                    <button class="btn-option" id="lang-en">EN</button>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h4 data-i18n="font_size">Accesibilidad (Texto)</h4>
+                <div class="btn-group">
+                    <button class="btn-option" id="font-decrease">A-</button>
+                    <button class="btn-option active" id="font-reset">A</button>
+                    <button class="btn-option" id="font-increase">A+</button>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h4 data-i18n="accent_color">Color de Acento</h4>
+                <div class="color-picker">
+                    <button class="color-dot active" data-color="blue" style="background-color: #2563eb;" title="Azul"></button>
+                    <button class="color-dot" data-color="green" style="background-color: #10b981;" title="Verde Data"></button>
+                    <button class="color-dot" data-color="purple" style="background-color: #8b5cf6;" title="Morado Tech"></button>
+                </div>
+            </div>
+        </div>
+    </aside>
 
     <header>
         <div class="container">
             <h1>Sergio Ruiz Torres</h1>
-            <p class="subtitle typing-text">Ingeniería Civil Electrónica | Data Engineer Junior | Fundador de S&F Atelier</p>
+            <p class="subtitle typing-text" data-i18n="subtitle">Ingeniería Civil Electrónica | Data Engineer Junior | Fundador de S&F Atelier</p>
             
             <div class="contact-icons">
                 <a href="mailto:sergio.r.a.ruiz.t@gmail.com" title="Enviar Email">
@@ -54,6 +85,9 @@
                 <a href="https://www.linkedin.com/in/sergio-ruiz-torres-engineer/" target="_blank" title="Ver LinkedIn">
                     <i class="fa-brands fa-linkedin"></i>
                 </a>
+                <a href="https://drive.google.com/file/d/1NDOqKUCmoFVi_YYTsdD74cB_z7mcjdmE/view?usp=drive_link" target="_blank" title="Descargar CV PDF" class="header-pdf-icon">
+                    <i class="fa-solid fa-file-arrow-down"></i>
+                </a>
             </div>
         </div>
     </header>
@@ -61,8 +95,8 @@
     <main class="container">
         
         <section id="about">
-            <h2>Perfil Profesional</h2>
-            <p>Estudiante de Ingeniería Civil Electrónica con sólida base técnica en hardware y automatización, actualmente especializándose en <strong>Data Engineering.</strong> Cuento con experiencia práctica en la resolución de problemas complejos, desde la reparación de sistemas electrónicos hasta la creación de una empresa de diseño digital <strong>S&F Atelier.</strong> Mi enfoque combina la precisión de la electrónica con el manejo de flujos de datos, buscando mi primera oportunidad profesional en el área de datos para aplicar conocimientos en Python, SQL y procesos ETL.</p>
+            <h2 data-i18n="profile_title">Perfil Profesional</h2>
+            <p data-i18n="profile_desc">Estudiante de Ingeniería Civil Electrónica con sólida base técnica en hardware y automatización, actualmente especializándose en <strong>Data Engineering.</strong> Cuento con experiencia práctica en la resolución de problemas complejos, desde la reparación de sistemas electrónicos hasta la creación de una empresa de diseño digital <strong>S&F Atelier.</strong> Mi enfoque combina la precisión de la electrónica con el manejo de flujos de datos, buscando mi primera oportunidad profesional en el área de datos para aplicar conocimientos en Python, SQL y procesos ETL.</p>
         </section>
 
         <section id="terminal-section">
@@ -80,13 +114,13 @@
                 </div>
                 <div class="terminal-input-line">
                     <span class="prompt">sergio_cv:~$</span>
-                    <input type="text" id="terminalInput" autocomplete="off" placeholder="Escribe un comando (ej: run-pipeline)..." autofocus>
+                    <input type="text" id="terminalInput" autocomplete="off" placeholder="Escribe un comando (ej: run-pipeline)...">
                 </div>
             </div>
         </section>
 
         <section id="experience">
-            <h2>Experiencia Destacada</h2>
+            <h2 data-i18n="exp_title">Experiencia Destacada</h2>
 
             <details class="exp-card" open>
                 <summary>
@@ -150,30 +184,10 @@
                     </ul>
                 </div>
             </details>
-
-            <div class="other-experience">
-                <h3>Otras Habilidades de Adaptación</h3>
-                
-                <div class="small-card blue-card">
-                    <div class="small-card-header">
-                        <strong>Operador de Parquímetros | Bomberos y Estacionar S.A </strong>
-                        <span class="small-date">Veranos (Ene - Feb)</span>
-                    </div>
-                    <p>Gestión de alta demanda de usuarios, resolución de conflictos en terreno, manejo de sistemas de recaudación y cuadratura de caja.</p>
-                </div>
-
-                <div class="small-card blue-card">
-                    <div class="small-card-header">
-                        <strong>Voluntariado | Iluminando Chile</strong>
-                        <span class="small-date">Proyectos de Emergencia</span>
-                    </div>
-                    <p>Ejecución de instalaciones eléctricas seguras y dignas en sectores vulnerables. Mi labor se enfoca en combatir la precariedad energética mediante sistemas normalizados.</p>
-                </div>
-            </div>
         </section>
 
         <section id="projects">
-            <h2>Portafolio de Proyectos</h2>
+            <h2 data-i18n="proj_title">Portafolio de Proyectos</h2>
             <div class="projects-container">
 
                 <div class="project-item">
@@ -201,7 +215,7 @@
                     <div class="project-info-card">
                         <h3>Diseño y Construcción de CNC</h3>
                         <p>Desarrollo estructural en perfiles de aluminio y sistema de control Mach3. Desde el modelado 3D hasta la puesta en marcha técnica.</p>
-                        <div class="tags"><span>Diseño web</span> <span>Electrónica</span> <span>Mach3</span></div>
+                        <div class="tags"><span>Diseño industrial</span> <span>Electrónica</span> <span>Mach3</span></div>
                     </div>
                 </div>
 
@@ -211,6 +225,9 @@
                             <div class="swiper-slide">
                                 <img src="assets/Untitled.png" alt="Dashboard" onerror="this.src='https://via.placeholder.com/600x400?text=Data+Project'">
                             </div>
+                            <div class="swiper-slide">
+                                <img src="assets/pipeline.jpeg" alt="Pipeline" onerror="this.src='https://via.placeholder.com/600x400?text=Foto+2+CNC'">
+                            </div>
                         </div>
                         <div class="swiper-button-next"></div>
                         <div class="swiper-button-prev"></div>
@@ -218,8 +235,51 @@
                     </div>
                     <div class="project-info-card">
                         <h3>Arquitectura de Datos</h3>
-                        <p>Pipelines ETL escalables y visualización de métricas de ingeniería en tiempo real.</p>
-                        <div class="tags"><span>Programación</span> <span>Análisis de datos</span> <span>Google Sheets</span></div>
+                        <p>Desarrollo de un ecosistema de datos modular batch-oriented. Extracción de fuentes semi-estructuradas (Google Sheets) orquestada mediante DAGs y triggers condicionales en Mage.ai. Modelado de capa Staging en PostgreSQL y carga analítica final (OLAP) en ClickHouse para minimizar tiempos de consulta. Visualización final desarrollada en Streamlit.</p>
+                        <div class="pipeline-simulator">
+                        <div class="pipeline-header">
+                            <h4>Flujo de Datos en Vivo</h4>
+                            <button id="run-pipeline-btn" class="btn-primary" style="padding: 4px 10px; font-size: 0.8rem;">
+                                <i class="fa-solid fa-play"></i> Ejecutar
+                            </button>
+                        </div>
+                        
+                        <div class="pipeline-graph" id="pipeline-graph">
+                            <div class="data-dot" id="data-dot"></div> <div class="node-item" id="node-sheets">
+                                <i class="fa-solid fa-file-excel" style="color: #10b981;"></i>
+                                <span>G-Sheets</span>
+                            </div>
+                            <div class="node-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                            
+                            <div class="node-item" id="node-mage">
+                                <i class="fa-solid fa-wand-magic-sparkles" style="color: #8b5cf6;"></i>
+                                <span>Mage.ai</span>
+                            </div>
+                            <div class="node-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                            
+                            <div class="node-item" id="node-pg">
+                                <i class="fa-solid fa-database" style="color: #3b82f6;"></i>
+                                <span>PostgreSQL</span>
+                            </div>
+                            <div class="node-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                            
+                            <div class="node-item" id="node-ch">
+                                <i class="fa-solid fa-server" style="color: #f59e0b;"></i>
+                                <span>ClickHouse</span>
+                            </div>
+                            <div class="node-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                            
+                            <div class="node-item" id="node-st">
+                                <i class="fa-solid fa-chart-line" style="color: #ef4444;"></i>
+                                <span>Streamlit</span>
+                            </div>
+                        </div>
+
+                        <div class="pipeline-console" id="pipeline-console">
+                            <p style="color: var(--text-muted);">Esperando inicialización del trigger...</p>
+                        </div>
+                    </div>
+                        <div class="tags"><span>Programación</span> <span>Análisis de datos</span> <span>Streamlit</span></div>
                     </div>
                 </div>
 
@@ -231,7 +291,6 @@
                             </div>
                             <div class="browser-url">https://syfatelier.cl</div> 
                         </div>
-                        
                         <div class="swiper projectSwiper">
                             <div class="swiper-wrapper">
                                 <div class="swiper-slide">
@@ -246,16 +305,10 @@
                             <div class="swiper-pagination"></div>
                         </div>
                     </div>
-
                     <div class="project-info-card">
                         <h3>Desarrollo Frontend E-commerce</h3>
                         <p>Diseño e implementación de interfaz web responsiva. Optimización de tiempos de carga, animaciones CSS y estructuración semántica para mejorar el SEO y la experiencia de usuario (UX/UI).</p>
-                        <div class="tags">
-                            <span>HTML5/CSS3</span> 
-                            <span>JavaScript</span> 
-                            <span>UI/UX</span>
-                        </div>
-                        
+                        <div class="tags"><span>HTML5/CSS3</span> <span>JavaScript</span> <span>UI/UX</span></div>
                         <div class="project-links">
                             <a href="https://github.com/syf-atelier/syf-atelier.github.io" target="_blank" class="btn-outline">
                                 <i class="fa-brands fa-github"></i> Código
@@ -272,7 +325,7 @@
 
         <section id="skills">
             <div class="section-header-skills">
-                <h2>Habilidades Técnicas</h2>
+                <h2 data-i18n="skills_title">Habilidades Técnicas</h2>
                 <div class="search-container">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" id="skillInput" placeholder="Filtra (ej: Python, CNC)...">
@@ -312,48 +365,35 @@
         </section>
 
         <section id="certifications">
-            <h2>Certificaciones Oficiales</h2>
+            <h2 data-i18n="certs_title">Certificaciones Oficiales</h2>
             <div class="cert-grid">
-                
                 <div class="cert-card">
-                    <div class="cert-icon" title="Inteligencia Artificial">
-                        <i class="fa-solid fa-brain"></i>
-                    </div>
+                    <div class="cert-icon" title="Inteligencia Artificial"><i class="fa-solid fa-brain"></i></div>
                     <div class="cert-info">
                         <h3>Artificial Intelligence Fundamentals</h3>
                         <p class="cert-issuer">IBM</p>
-                        <span class="cert-date">Insignia Digital Activa</span>
-                        <a href="https://www.credly.com/badges/4d88cd2f-0a78-4585-81e9-79a6cebd8091/public_url" target="_blank" class="cert-link">
-                            Ver Credencial <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
+                        <a href="https://www.credly.com/badges/4d88cd2f-0a78-4585-81e9-79a6cebd8091/public_url" target="_blank" class="cert-link">Ver Credencial <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                     </div>
                 </div>
-
                 <div class="cert-card">
-                    <div class="cert-icon" title="Ciberseguridad">
-                        <i class="fa-solid fa-shield-halved"></i>
-                    </div>
+                    <div class="cert-icon" title="Ciberseguridad"><i class="fa-solid fa-shield-halved"></i></div>
                     <div class="cert-info">
                         <h3>Cyber Threat Management</h3>
                         <p class="cert-issuer">Cisco</p>
-                        <span class="cert-date">Insignia Digital Activa</span>
-                        <a href="https://www.credly.com/badges/576510c6-fc75-41ba-b55b-13c92a88fb4b/public_url" target="_blank" class="cert-link">
-                            Ver Credencial <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
+                        <a href="https://www.credly.com/badges/576510c6-fc75-41ba-b55b-13c92a88fb4b/public_url" target="_blank" class="cert-link">Ver Credencial <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                     </div>
                 </div>
-
             </div>
         </section>
 
         <section id="education">
-            <h2>Formación Académica</h2>
+            <h2 data-i18n="edu_title">Formación Académica</h2>
             <div class="edu-item">
                 <div class="edu-dot"></div>
                 <div class="edu-content">
                     <h3>Ingeniería Civil Electrónica</h3>
                     <p>Pontificia Universidad Católica de Valparaíso (PUCV)</p>
-                    <span class="edu-date">En curso</span>
+                    <span class="edu-date" data-i18n="edu_status1">En curso</span>
                 </div>
             </div>
             <div class="edu-item">
@@ -361,7 +401,7 @@
                 <div class="edu-content">
                     <h3>Técnico en Electrónica</h3>
                     <p>Licencia de Enseñanza Media con Titulación Técnica</p>
-                    <span class="edu-date">Titulado</span>
+                    <span class="edu-date" data-i18n="edu_status2">Titulado</span>
                 </div>
             </div>
         </section>
@@ -370,17 +410,18 @@
 
     <footer class="main-footer">
         <div class="container footer-grid">
+            
             <div class="footer-brand">
                 <span class="footer-logo">🧑🏽‍💻 Sergio Ruiz Torres</span>
-                <p>Ingeniería Civil Electrónica & Data Engineering. Construyendo soluciones donde el hardware y el software convergen.</p>
+                <p data-i18n="footer_desc">Ingeniería Civil Electrónica & Data Engineering. Construyendo soluciones donde el hardware y el software convergen.</p>
             </div>
 
             <div class="footer-links">
-                <h4>Navegación</h4>
+                <h4 data-i18n="footer_nav">Navegación</h4>
                 <ul>
-                    <li><a href="#about">Perfil</a></li>
-                    <li><a href="#experience">Experiencia</a></li>
-                    <li><a href="#projects">Portafolio</a></li>
+                    <li><a href="#about" data-i18n="nav_profile">Perfil</a></li>
+                    <li><a href="#experience" data-i18n="nav_exp">Experiencia</a></li>
+                    <li><a href="#projects" data-i18n="nav_proj">Portafolio</a></li>
                 </ul>
             </div>
 
@@ -394,6 +435,7 @@
                 </div>
                 <p>Desplegado en GitHub Pages © 2026</p>
             </div>
+
         </div>
         
         <div class="footer-bottom">
