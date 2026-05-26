@@ -1,0 +1,8 @@
+[
+    { "id": 1, "name": "Mesa Industrial 3x2", "price": 150000, "icon": "🪑", "stock": 15 },
+    { "id": 2, "name": "Silla Roble Oscuro", "price": 45000, "icon": "🪑", "stock": 42 },
+    { "id": 3, "name": "Repisa Mural Flotante", "price": 25000, "icon": "🧱", "stock": 28 },
+    { "id": 4, "name": "Asesoría Técnica", "price": 30000, "icon": "📐", "stock": 99 },
+    { "id": 5, "name": "Servicio Instalación", "price": 35000, "icon": "⚡", "stock": 99 },
+    { "id": 6, "name": "Despacho a Domicilio", "price": 15000, "icon": "🚚", "stock": 99 }
+]

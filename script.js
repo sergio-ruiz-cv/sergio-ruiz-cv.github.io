@@ -85,10 +85,10 @@ document.addEventListener('DOMContentLoaded', () => {
             'sim_wait': 'Esperando inicialización del trigger...',
             'tag_prog': 'Programación',
             'tag_data_analysis': 'Análisis de datos',
-            'proj_web_title': 'Desarrollo Frontend E-commerce',
-            'proj_web_desc': 'Diseño e implementación de interfaz web responsiva. Optimización de tiempos de carga, animaciones CSS y estructuración semántica para mejorar el SEO y la experiencia de usuario (UX/UI).',
+            'proj_web_title': 'Desarrollo Frontend E-commerce | S&F Atelier',
+            'proj_web_desc': 'Diseño e implementación de interfaz web responsiva. Optimización de tiempos de carga, catálogo dinámico y estructuración semántica avanzada.',
             'code_btn': 'Código',
-            'demo_btn': 'Demo',
+            'demo_btn': 'Demo en Vivo',
             'skills_title': 'Habilidades Técnicas',
             'certs_title': 'Certificaciones Oficiales',
             'edu_title': 'Formación Académica',
@@ -104,7 +104,19 @@ document.addEventListener('DOMContentLoaded', () => {
             'nav_exp': 'Experiencia',
             'nav_proj': 'Portafolio',
             'footer_deploy': 'Desplegado en GitHub Pages © 2026',
-            'footer_rights': 'Todos los derechos reservados.'
+            'footer_rights': 'Todos los derechos reservados.',
+            'back_cv': 'Volver al CV',
+            'case_web_title': 'Casos de Estudio: Desarrollo Frontend',
+            'case_web_subtitle': 'Demostración interactiva de diseño responsivo y UX/UI nativo.',
+            'case_psic_title': 'Plataforma Web | Psicología Clínica',
+            'case_psic_desc': 'Diseño de landing page enfocado en la conversión, agendamiento rápido y experiencia de usuario (UX) pacífica. Implementación 100% adaptativa.',
+            'case_flash_title': 'Servicios Eléctricos | Flash',
+            'case_flash_desc': 'Diseño corporativo para servicios de instalaciones y regularización eléctrica. Enfoque en claridad de servicios y transmisión de confianza técnica.',
+            'case_back_title': 'Desarrollo Backend & Sistemas Internos',
+            'case_back_subtitle': 'Arquitectura de datos, lógica de negocios e interfaces privadas.',
+            'case_pos_title': 'Sistema POS (Point of Sale) & Control de Inventario',
+            'case_pos_desc': 'Desarrollo de interfaz de caja interactiva conectada a base de datos. Permite registro rápido de ventas, emisión de tickets y actualización de stock en tiempo real.',
+            'arch_diagram': 'Arquitectura de Datos'
         },
         'en': {
             'settings_title': '<i class="fa-solid fa-gear"></i> Control Panel',
@@ -139,10 +151,10 @@ document.addEventListener('DOMContentLoaded', () => {
             'sim_wait': 'Waiting for trigger initialization...',
             'tag_prog': 'Programming',
             'tag_data_analysis': 'Data Analysis',
-            'proj_web_title': 'E-commerce Frontend Development',
-            'proj_web_desc': 'Design and implementation of a responsive web interface. Load time optimization, CSS animations, and semantic structuring to improve SEO and user experience (UX/UI).',
+            'proj_web_title': 'E-commerce Frontend Development | S&F Atelier',
+            'proj_web_desc': 'Design and implementation of a responsive web interface. Load time optimization, dynamic catalog, and advanced semantic structuring.',
             'code_btn': 'Code',
-            'demo_btn': 'Demo',
+            'demo_btn': 'Live Demo',
             'skills_title': 'Technical Skills',
             'certs_title': 'Official Certifications',
             'edu_title': 'Education',
@@ -158,7 +170,19 @@ document.addEventListener('DOMContentLoaded', () => {
             'nav_exp': 'Experience',
             'nav_proj': 'Portfolio',
             'footer_deploy': 'Deployed on GitHub Pages © 2026',
-            'footer_rights': 'All rights reserved.'
+            'footer_rights': 'All rights reserved.',
+            'back_cv': 'Back to CV',
+            'case_web_title': 'Case Studies: Frontend Development',
+            'case_web_subtitle': 'Interactive demonstration of responsive design and native UX/UI.',
+            'case_psic_title': 'Web Platform | Clinical Psychology',
+            'case_psic_desc': 'Landing page design focused on conversion, rapid scheduling, and peaceful user experience (UX). 100% adaptive implementation.',
+            'case_flash_title': 'Electrical Services | Flash',
+            'case_flash_desc': 'Corporate design for electrical installation and regularization services. Focused on service clarity and technical trust.',
+            'case_back_title': 'Backend & Internal Systems Development',
+            'case_back_subtitle': 'Data architecture, business logic, and private interfaces.',
+            'case_pos_title': 'POS System & Inventory Control',
+            'case_pos_desc': 'Development of an interactive cashier interface connected to a database. Allows rapid sales registration, receipt issuance, and real-time stock updates.',
+            'arch_diagram': 'Data Architecture'
         }
     };
 
@@ -400,5 +424,41 @@ document.addEventListener('DOMContentLoaded', () => {
             dataDot.style.transform = `translate(0px, 50%)`; // Reset position
             runPipeBtn.disabled = false;
             runPipeBtn.innerHTML = '<i class="fa-solid fa-play"></i> Re-Ejecutar';
+        });
+    }
+    /* =========================================
+       7. MENÚ DE HAMBURGUESA RESPONSIVE (SUBPÁGINAS)
+       ========================================= */
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const navLinksMenu = document.getElementById('nav-links-menu');
+
+    if (hamburgerBtn && navLinksMenu) {
+        hamburgerBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navLinksMenu.classList.toggle('active');
+            
+            // Cambiar icono según estado
+            const icon = hamburgerBtn.querySelector('i');
+            if (navLinksMenu.classList.contains('active')) {
+                icon.className = 'fa-solid fa-xmark';
+            } else {
+                icon.className = 'fa-solid fa-bars';
+            }
+        });
+
+        // Cerrar el menú al hacer clic en un enlace
+        navLinksMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinksMenu.classList.remove('active');
+                hamburgerBtn.querySelector('i').className = 'fa-solid fa-bars';
+            });
+        });
+
+        // Cerrar al hacer clic fuera del menú
+        document.addEventListener('click', (e) => {
+            if (!navLinksMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+                navLinksMenu.classList.remove('active');
+                hamburgerBtn.querySelector('i').className = 'fa-solid fa-bars';
+            }
         });
     }
