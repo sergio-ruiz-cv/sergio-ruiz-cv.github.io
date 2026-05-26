@@ -25,6 +25,11 @@
     --swiper-navigation-size: 20px;
     --swiper-theme-color: var(--primary);
 }
+/* Asegura transiciones de scroll suaves en todo tu ecosistema web */
+html {
+    scroll-behavior: smooth;
+    overflow-x: hidden; /* Evita que cualquier descuadre cree scroll horizontal en tu web principal */
+}
 
 /* Modificadores de Color de Acento */
 [data-color="green"] {
@@ -463,8 +468,13 @@ details[open] .icon-arrow { transform: rotate(180deg); color: var(--primary); }
 [data-theme="dark"] .desktop-mockup-url { background: #0f172a; color: #94a3b8; }
 
 /* Caja de Iframe Escritorio con truco de Escalado */
+/* Caja de Iframe Escritorio con truco de Escalado */
 .desktop-iframe-area {
-    position: relative; width: 100%; height: 420px; background: #fff; overflow: auto;
+    position: relative; 
+    width: 100%; 
+    height: 420px; 
+    background: #fff; 
+    overflow: hidden; /* ¡AQUÍ ESTÁ LA MAGIA! Esto elimina las barras fantasma */
 }
 .iframe-desktop {
     width: 200%; height: 200%; /* Renderiza la web internamente al doble de espacio */
@@ -529,45 +539,95 @@ details[open] .icon-arrow { transform: rotate(180deg); color: var(--primary); }
     .nav-links.active { display: flex; }
 }
 /* =========================================
-   MARCO MOCKUP TABLET (Para Backend / POS)
+   MARCO MOCKUP TABLET (Optimizado y Responsivo)
    ========================================= */
 .tablet-layout {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin-top: 2rem;
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 2.5rem; 
+    align-items: start; 
+    margin-top: 2rem;
+    width: 100%;
 }
 
 .device-tablet-wrapper {
-    width: 100%; margin: 0 auto;
+    width: 100%; 
+    max-width: 680px;
+    margin: 0 auto;
 }
 
 .tablet-mockup-frame {
-    position: relative; width: 100%; aspect-ratio: 4/3;
-    background: #111; border-radius: 28px; padding: 4% 5%;
-    box-shadow: 0 25px 45px rgba(0,0,0,0.4), inset 0 0 0 2px #333;
-    border: 4px solid #222; display: flex; align-items: center; justify-content: center;
+    position: relative; 
+    width: 100%; 
+    aspect-ratio: 4/3;
+    background: #111; 
+    border-radius: 24px; 
+    padding: 3.5%; /* Padding porcentual para que escale parejo */
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    border: 4px solid #222; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
 }
 
 .tablet-camera {
-    position: absolute; top: 50%; left: 2%; transform: translateY(-50%);
-    width: 10px; height: 10px; background: #000; border-radius: 50%; box-shadow: inset 0 0 3px rgba(255,255,255,0.3);
+    position: absolute; 
+    top: 50%; 
+    left: 12px; 
+    transform: translateY(-50%);
+    width: 8px; 
+    height: 8px; 
+    background: #050505; 
+    border-radius: 50%;
 }
 
 .tablet-iframe-area {
-    width: 100%; height: 100%; background: #f8fafc; border-radius: 12px; overflow: hidden;
+    width: 100%; 
+    height: 100%; 
+    background: #f8fafc; 
+    border-radius: 8px; 
+    overflow: hidden; 
+    position: relative;
 }
 
 .iframe-tablet {
-    width: 100%; height: 100%; border: none; display: block;
+    width: 100%; 
+    height: 100%; 
+    border: none; 
+    display: block;
 }
 
-/* Imagen de Arquitectura Backend */
+/* Imagen o contenedor de Arquitectura Backend */
 .architecture-diagram {
-    background: var(--white); border: 1px solid var(--accent); border-radius: 16px; padding: 1.5rem;
-    box-shadow: 0 10px 20px var(--card-shadow); text-align: center;
-}
-.architecture-diagram img {
-    width: 100%; border-radius: 8px; margin-top: 1rem;
+    background: var(--white); 
+    border: 1px solid var(--accent); 
+    border-radius: 16px; 
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px var(--card-shadow);
 }
 
+/* ADAPTABILIDAD MÓVIL: Evita el colapso del simulador en celulares */
 @media (max-width: 992px) {
-    .tablet-layout { grid-template-columns: 1fr; }
+    .tablet-layout { 
+        grid-template-columns: 1fr; 
+        gap: 2rem;
+    }
+}
+
+@media (max-width: 600px) {
+    /* En celulares transformamos el marco rígido en una ventana de app fluida */
+    .tablet-mockup-frame {
+        aspect-ratio: auto;
+        height: 520px; /* Le damos una altura cómoda fija para operar el POS con el dedo */
+        padding: 0;
+        border-radius: 14px;
+        border: 2px solid var(--accent);
+        box-shadow: 0 5px 15px var(--card-shadow);
+    }
+    .tablet-camera { 
+        display: none; /* Ocultamos la cámara virtual en pantallas chicas */
+    }
+    .tablet-iframe-area {
+        border-radius: 12px;
+    }
 }
