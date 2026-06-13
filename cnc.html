@@ -9,6 +9,100 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* ESTILOS DEL SLIDER INTERACTIVO (ANTES Y DESPUÉS) */
+        .comparison-slider-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin: 2rem auto;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            border: 2px solid var(--border);
+            aspect-ratio: 16/9;
+            background: #1e293b;
+        }
+        .comparison-img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+        .comparison-img-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 50%; /* Se ajusta con JS */
+            height: 100%;
+            overflow: hidden;
+            z-index: 2;
+        }
+        .comparison-img-overlay img {
+            width: 100vw; /* Trick to keep image size static */
+            max-width: 900px;
+            height: 100%;
+            object-fit: cover;
+            object-position: left;
+        }
+        .comparison-handle {
+            position: absolute;
+            top: 0; left: 50%;
+            width: 4px; height: 100%;
+            background: var(--primary);
+            z-index: 3;
+            transform: translateX(-50%);
+            pointer-events: none;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .comparison-handle-btn {
+            width: 40px; height: 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            font-size: 1.2rem;
+            border: 3px solid white;
+        }
+        .comparison-range {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            opacity: 0;
+            z-index: 4;
+            cursor: ew-resize;
+        }
+        .comparison-labels {
+            position: absolute; bottom: 15px; width: 100%;
+            display: flex; justify-content: space-between;
+            padding: 0 20px; z-index: 1; pointer-events: none;
+        }
+        .comp-label {
+            background: rgba(15, 23, 42, 0.8); color: white;
+            padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+        }
+        .comp-label.overlay { z-index: 3; position: absolute; bottom: 15px; left: 20px; pointer-events: none; }
+
+        /* ESTILOS DE SECCIONES TÉCNICAS */
+        .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
+        .tech-card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; box-shadow: 0 4px 10px var(--card-shadow); transition: transform 0.3s; }
+        .tech-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .tech-icon { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; }
+        .tech-card h3 { margin-bottom: 1rem; font-size: 1.3rem; }
+        .tech-card p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* SECCIÓN SOSTENIBILIDAD */
+        .sustainability-banner {
+            background: linear-gradient(135deg, #064e3b 0%, #0f172a 100%);
+            color: white; border-radius: 16px; padding: 3rem 2rem;
+            display: flex; flex-wrap: wrap; gap: 2rem; align-items: center; margin-bottom: 4rem;
+        }
+        .sust-content { flex: 1; min-width: 300px; }
+        .sust-content h2 { border-bottom: none; color: #34d399; margin-top: 0; }
+        .sust-content p { color: #e2e8f0; font-size: 1.05rem; }
+    </style>
 </head>
 <body>
 
@@ -18,85 +112,96 @@
                 <i class="fa-solid fa-arrow-left"></i> <span data-i18n="back_cv">Volver al CV</span>
             </a>
             <span class="nav-brand">Sergio Ruiz Torres</span>
-            
-            <button class="hamburger-menu" id="hamburger-btn" title="Abrir Menú">
-                <i class="fa-solid fa-bars"></i>
-            </button>
-
-            <ul class="nav-links" id="nav-links-menu">
-                <li><a href="index.html#about" data-i18n="nav_profile">Perfil</a></li>
-                <li><a href="index.html#experience" data-i18n="nav_exp">Experiencia</a></li>
-                <li><a href="index.html#projects" data-i18n="nav_proj">Portafolio</a></li>
-            </ul>
         </div>
     </nav>
 
-    <header style="background: var(--accent); padding: 2.5rem 1rem; border-top: 2px solid var(--primary); border-bottom: 2px solid var(--primary); margin-bottom: 4rem;">
+    <header style="background: var(--accent); padding: 3rem 1rem; border-top: 2px solid var(--primary); border-bottom: 2px solid var(--primary); margin-bottom: 3rem;">
         <div class="container">
-            <h1 style="color: var(--dark); font-size: 2.2rem;">Automatización Industrial: Router CNC</h1>
-            <p style="color: var(--text-muted); font-size: 1.1rem;">Ciclo completo de desarrollo: Desde el modelado tridimensional hasta la puesta en marcha técnica.</p>
+            <h1 style="color: var(--dark); font-size: 2.5rem; margin-bottom: 10px;">Ingeniería Mecatrónica: Router CNC</h1>
+            <p style="color: var(--text-muted); font-size: 1.15rem; max-width: 800px;">Ciclo completo de desarrollo: Desde el modelado analítico de distribución de esfuerzos (CAD) hasta la calibración física, diseño del control electrónico e implementación sostenible orientada a la manufactura.</p>
         </div>
     </header>
 
     <main class="container" style="max-width: 1000px; padding-bottom: 5rem;">
         
-        <section class="project-case-info" style="margin-bottom: 4rem;">
-            <h2><i class="fa-solid fa-bezier-curve"></i> Flujo de Diseño e Integración</h2>
-            <p style="margin-top: 1rem; font-size: 1.1rem; line-height: 1.6;">
-                Este proyecto representa la convergencia entre la ingeniería mecánica, el diseño computacional y la electrónica de potencia. El objetivo principal fue el desarrollo de una maquinaria de gran formato (3x2 metros) optimizada para la manufactura digital, minimizando la holgura estructural y maximizando la eficiencia en el uso de materiales mediante simulaciones previas.
-            </p>
+        <section style="margin-bottom: 5rem;">
+            <h2><i class="fa-solid fa-object-ungroup"></i> Gemelo Digital vs. Implementación Física</h2>
+            <p style="font-size: 1.05rem; color: var(--text); margin-bottom: 1.5rem;">Desliza la barra central para comparar el modelado 3D (realizado para validar geometrías y reducción de holguras) con el ensamblaje físico operando en el taller.</p>
+            
+            <div class="comparison-slider-wrapper" id="slider-wrapper">
+                <img src="assets/carrocnc.jpeg" alt="Máquina Física" class="comparison-img" onerror="this.src='https://via.placeholder.com/900x500?text=Foto+Maquina+Real'">
+                
+                <div class="comparison-img-overlay" id="img-overlay">
+                    <img src="assets/prototipo.png" alt="Modelo 3D" onerror="this.src='https://via.placeholder.com/900x500?text=Modelo+3D+(CAD)'">
+                    <div class="comp-label overlay"><i class="fa-solid fa-cube"></i> MODELO 3D (CAD)</div>
+                </div>
+
+                <div class="comparison-labels">
+                    <div style="opacity: 0;">Spacer</div> <div class="comp-label"><i class="fa-solid fa-wrench"></i> ENSAMBLE REAL</div>
+                </div>
+
+                <div class="comparison-handle" id="slider-handle">
+                    <div class="comparison-handle-btn"><i class="fa-solid fa-left-right"></i></div>
+                </div>
+                <input type="range" min="0" max="100" value="50" class="comparison-range" id="comparison-slider">
+            </div>
         </section>
 
         <section style="margin-bottom: 4rem;">
-            <h3 style="color: var(--dark); font-weight: 700; margin-bottom: 2rem;"><i class="fa-solid fa-images"></i> Evolución del Proyecto: Virtual vs. Real</h3>
+            <h2><i class="fa-solid fa-microchip"></i> Arquitectura Hardware y Decisiones de Diseño</h2>
             
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
-                <div style="background: var(--bg-panel); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 4px 10px var(--card-shadow);">
-                    <div style="height: 300px; background: #e2e8f0; display: flex; align-items: center; justify-content: center; position: relative;">
-                        <img src="tu-imagen-modelo-3d.jpg" alt="Modelado 3D del CNC" style="width:100%; height:100%; object-fit: cover; onerror: this.style.display='none';">
-                        <div style="position: absolute; background: rgba(15, 23, 42, 0.75); color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; bottom: 15px; left: 15px;">
-                            <i class="fa-solid fa-cubes"></i> Etapa 1: Modelado Virtual y Simulación
-                        </div>
-                    </div>
-                    <div style="padding: 1.5rem;">
-                        <h4 style="margin: 0 0 0.5rem 0; color: var(--dark);">Optimización Estructural Virtual</h4>
-                        <p style="font-size: 0.95rem; color: var(--text-muted); margin: 0;">Modelado analítico orientado a la distribución de esfuerzos. Permitió validar las líneas de guías de precisión y prever el comportamiento inercial antes de la adquisición de componentes físicos.</p>
-                    </div>
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <div class="tech-icon"><i class="fa-solid fa-fan"></i></div>
+                    <h3>Husillo Industrial vs. Router Comercial</h3>
+                    <p>A diferencia de los equipos comerciales de bajo costo que utilizan routers de mano (ej. Makita/Dewalt), esta máquina integra un <strong>Husillo Industrial (Spindle)</strong> controlado por un Variador de Frecuencia (VFD). </p>
+                    <p><strong>Ventaja Técnica:</strong> Permite un ciclo de trabajo continuo (24/7), posee refrigeración activa, rodamientos de contacto angular que soportan altísimas cargas radiales/axiales y elimina el 'runout' (oscilación), logrando acabados milimétricos imposibles con herramientas manuales adaptadas.</p>
                 </div>
 
-                <div style="background: var(--bg-panel); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 4px 10px var(--card-shadow);">
-                    <div style="height: 300px; background: #e2e8f0; display: flex; align-items: center; justify-content: center; position: relative;">
-                        <img src="tu-imagen-cnc-real.jpg" alt="CNC Realizado Operando" style="width:100%; height:100%; object-fit: cover; onerror: this.style.display='none';">
-                        <div style="position: absolute; background: var(--primary); color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; bottom: 15px; left: 15px;">
-                            <i class="fa-solid fa-circle-check"></i> Etapa 2: Implementación y Operación
-                        </div>
-                    </div>
-                    <div style="padding: 1.5rem;">
-                        <h4 style="margin: 0 0 0.5rem 0; color: var(--dark);">Montaje e Integración de Sistemas</h4>
-                        <p style="font-size: 0.95rem; color: var(--text-muted); margin: 0;">Traspaso físico del diseño. Ensamble de la cinemática, alineación milimétrica de ejes mediante herramientas de medición industrial e integración del husillo de alta velocidad.</p>
-                    </div>
+                <div class="tech-card">
+                    <div class="tech-icon"><i class="fa-solid fa-gears"></i></div>
+                    <h3>Cinemática: Motores Paso a Paso</h3>
+                    <p>Para la tracción se seleccionaron <strong>Motores Stepper (Paso a Paso)</strong> dimensionados bajo cálculos estrictos de torque de retención (holding torque) y resistencia inercial.</p>
+                    <p><strong>Ventaja Técnica:</strong> Al utilizar drivers con <em>microstepping</em>, logramos resoluciones nanométricas sin la necesidad de implementar sistemas de lazo cerrado (servomotores) de alto costo. La robustez del pórtico de aluminio y guías lineales previenen la pérdida de pasos, garantizando precisión repetible en formatos de 3x2 metros.</p>
                 </div>
             </div>
         </section>
 
-        <section style="background: var(--bg-panel); padding: 2.5rem; border-radius: 20px; border: 1px solid var(--border);">
-            <h3 style="color: var(--dark); font-weight: 700; margin-top:0; margin-bottom: 1rem;"><i class="fa-solid fa-charging-station"></i> Robustez Electrónica y Control</h3>
-            <p style="color: var(--text); font-size: 1rem; line-height: 1.6; margin-bottom: 1.5rem;">
-                La electrónica del sistema fue diseñada bajo criterios estrictos de aislamiento y protección industrial para garantizar entornos estables de operación continua:
-            </p>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-                <div style="display: flex; gap: 12px;">
-                    <div style="color: var(--primary); font-size: 1.2rem;"><i class="fa-solid fa-shield-halved"></i></div>
-                    <div>
-                        <h4 style="margin: 0 0 0.25rem 0; font-size: 1rem;">Inmunidad al Ruido (EMI)</h4>
-                        <p style="margin:0; font-size: 0.9rem; color: var(--text-muted);">Aislamiento de la lógica de control frente a las corrientes parásitas y armónicos del inversor del husillo.</p>
-                    </div>
+        <section style="background: var(--bg-panel); padding: 2.5rem; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 5rem; box-shadow: 0 4px 15px var(--card-shadow);">
+            <div style="display: flex; flex-wrap: wrap; gap: 2rem; align-items: flex-start;">
+                <div style="flex: 1; min-width: 300px;">
+                    <h2 style="margin-top:0; border-bottom: none;"><i class="fa-solid fa-bolt"></i> Seguridad y Tablero de Control</h2>
+                    <p style="color: var(--text); font-size: 1rem; line-height: 1.6; margin-bottom: 1.5rem;">
+                        La electrónica de potencia y la lógica de control convergen en un tablero diseñado bajo normativas de aislamiento industrial. Manejar el husillo y los motores simultáneamente genera corrientes parásitas severas.
+                    </p>
+                    <ul style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.8; padding-left: 20px;">
+                        <li><strong>Aislamiento:</strong> Separación física y cableado para proteger la placa controladora EC300 de las interferencias electromagnéticas del VFD.</li>
+                        <li><strong>Protección Eléctrica:</strong> El tablero integra componentes de seguridad estandarizados, incluyendo interruptor diferencial, disyuntor magnetotérmico y luces piloto, asegurando la integridad tanto del operador como de los equipos ante sobrecargas o fallas a tierra.</li>
+                        <li><strong>Seguridad Física:</strong> Circuito de paradas de emergencia (E-Stop) interconectado por hardware (NC), interrumpiendo la potencia de tracción inmediatamente sin depender de software.</li>
+                    </ul>
                 </div>
-                <div style="display: flex; gap: 12px;">
-                    <div style="color: var(--primary); font-size: 1.2rem;"><i class="fa-solid fa-bolt"></i></div>
+                <div style="flex: 1; min-width: 300px; border-radius: 12px; overflow: hidden; background: #000; border: 2px solid var(--border);">
+                    <video autoplay muted loop playsinline style="width: 100%; display: block;">
+                        <source src="assets/tablero.mp4" type="video/mp4">
+                        <img src="https://via.placeholder.com/400x300?text=Tablero+Electrico" alt="Tablero Eléctrico" style="width:100%;">
+                    </video>
+                </div>
+            </div>
+        </section>
+
+        <section class="sustainability-banner">
+            <div style="font-size: 4rem; color: #34d399;"><i class="fa-solid fa-leaf"></i></div>
+            <div class="sust-content">
+                <h2>Visión S&F: Sostenibilidad en la Manufactura</h2>
+                <p style="margin-bottom: 1rem;">Como fundador de <strong>S&F Atelier</strong>, la integración de esta tecnología no solo buscaba precisión, sino también responsabilidad ambiental en el diseño mobiliario.</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem;">
                     <div>
-                        <h4 style="margin: 0 0 0.25rem 0; font-size: 1rem;">Gestión de Potencia Dinámica</h4>
-                        <p style="margin:0; font-size: 0.9rem; color: var(--text-muted);">Alimentación estabilizada para garantizar un torque constante en los motores de movimiento sin pérdida de pasos.</p>
+                        <h4 style="color: white; margin-bottom: 5px;"><i class="fa-solid fa-minimize"></i> Optimización de Retazos</h4>
+                        <p style="font-size: 0.85rem; color: #cbd5e1; margin:0;">El diseño paramétrico y el 'nesting' (anidado) de despieces en Fusion 360 / SketchUp antes del corte reducen la pérdida de tableros a casi cero.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: white; margin-bottom: 5px;"><i class="fa-solid fa-recycle"></i> Ciclo Cerrado (Compostaje)</h4>
+                        <p style="font-size: 0.85rem; color: #cbd5e1; margin:0;">La extracción de polvo está canalizada. La viruta y aserrín limpios generados por el CNC son reutilizados directamente para compostaje y masillas de restauración de muebles antiguos.</p>
                     </div>
                 </div>
             </div>
@@ -115,9 +220,9 @@
             <div class="footer-links">
                 <h4 data-i18n="footer_nav">Navegación</h4>
                 <ul>
-                    <li><a href="#about" data-i18n="nav_profile">Perfil</a></li>
-                    <li><a href="#experience" data-i18n="nav_exp">Experiencia</a></li>
-                    <li><a href="#projects" data-i18n="nav_proj">Portafolio</a></li>
+                    <li><a href="index.html#about" data-i18n="nav_profile">Perfil</a></li>
+                    <li><a href="index.html#experience" data-i18n="nav_exp">Experiencia</a></li>
+                    <li><a href="index.html#projects" data-i18n="nav_proj">Portafolio</a></li>
                 </ul>
             </div>
 
@@ -140,5 +245,21 @@
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        // LÓGICA DEL SLIDER INTERACTIVO (ANTES Y DESPUÉS)
+        document.addEventListener("DOMContentLoaded", function() {
+            const slider = document.getElementById("comparison-slider");
+            const overlay = document.getElementById("img-overlay");
+            const handle = document.getElementById("slider-handle");
+
+            if (slider && overlay && handle) {
+                slider.addEventListener("input", function(e) {
+                    const sliderValue = e.target.value;
+                    overlay.style.width = sliderValue + "%";
+                    handle.style.left = sliderValue + "%";
+                });
+            }
+        });
+    </script>
 </body>
 </html>

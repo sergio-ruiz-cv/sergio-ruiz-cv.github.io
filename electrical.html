@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electricidad | Sergio Ruiz Torres</title>
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>⚡</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .page-content { padding-top: 2rem; padding-bottom: 4rem; }
+        .content-section { margin-bottom: 4rem; }
+        .content-section h2 { color: var(--primary-color); margin-bottom: 1.5rem; font-size: 1.8rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; }
+        .content-section p { color: var(--text-color); line-height: 1.7; margin-bottom: 1rem; }
+        
+        .btn-back { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--primary-color); text-decoration: none; font-weight: 600; margin-bottom: 1rem; padding: 0.6rem 1.2rem; background: var(--bg-card); border-radius: 6px; border: 1px solid var(--primary-color); transition: 0.3s; }
+        .btn-back:hover { background: var(--primary-color); color: #fff; }
+
+        .electric-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 1.5rem; }
+        @media (min-width: 768px) { .electric-grid { grid-template-columns: 1fr 1fr; } }
+        
+        .electric-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; transition: transform 0.3s; }
+        .electric-card:hover { transform: translateY(-5px); border-color: var(--primary-color); }
+        .electric-card h3 { font-size: 1.3rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.8rem; color: var(--text-color); }
+        .electric-card p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; margin: 0; }
+        
+        .badge-volt { background: rgba(245, 158, 11, 0.1); color: #f59e0b; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; display: inline-block; margin-bottom: 1rem; }
+        .badge-singular { background: rgba(37, 99, 235, 0.1); color: #2563eb; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; display: inline-block; margin-bottom: 1rem; }
+
+        /* Contenedor optimizado para planos o imágenes cuadradas sin distorsión */
+        .square-media-container {
+            flex: 1;
+            min-width: 280px;
+            max-width: 400px;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+        }
+        .square-media-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 12px;
+            transition: transform 0.3s ease;
+        }
+        .square-media-container:hover img {
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-case-study">
+        <div class="nav-container">
+            <a href="index.html#projects" class="back-link">
+                <i class="fa-solid fa-arrow-left"></i> <span>Volver al CV</span>
+            </a>
+            <span class="nav-brand">Sergio Ruiz Torres</span>
+        </div>
+    </nav>
+
+    <header style="background: var(--accent); padding: 3rem 1rem; border-top: 2px solid var(--primary); border-bottom: 2px solid var(--primary); margin-bottom: 3rem;">
+        <div class="container">
+            <h1 style="color: var(--dark); font-size: 2.5rem; margin-bottom: 10px;">Electricidad y Diseño de Circuitos</h1>
+            <p style="color: var(--text-muted); font-size: 1.15rem; max-width: 800px;">Desarrollo de proyectos residenciales y comerciales, diseño de planos bajo normativas vigentes e intervención social orientada a la seguridad eléctrica.</p>
+        </div>
+    </header>
+
+    <main class="container page-content" style="max-width: 1000px;">
+        
+        <section class="content-section">
+            <h2>Habilidades Eléctricas Aplicadas</h2>
+            <p>Mi formación como Técnico en Electrónica y estudiante de Ingeniería Civil Electrónica en la PUCV me otorga un dominio avanzado sobre sistemas de baja tensión, interpretación de esquemas analíticos y distribución de potencia. Esta base me permite diseñar soluciones seguras, eficientes y normalizadas tanto en hardware industrial como en redes de distribución interna.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>Ejes de Experiencia y Proyectos</h2>
+            <div class="electric-grid">
+                
+                <div class="electric-card">
+                    <span class="badge-singular">Cofundador & Técnico</span>
+                    <h3><i class="fa-solid fa-bolt" style="color: #2563eb;"></i> Singular Electric</h3>
+                    <p>Diseño e implementación de instalaciones eléctricas residenciales y comerciales. Levantamiento de requerimientos en terreno, cálculo de protecciones térmicas y differentials, dimensionamiento de alimentadores y ejecución de tableros de distribución general respetando estándares técnicos y de seguridad.</p>
+                </div>
+
+                <div class="electric-card">
+                    <span class="badge-volt">Voluntariado PUCV</span>
+                    <h3><i class="fa-solid fa-hands-holding-child" style="color: #f59e0b;"></i> Iluminando Chile</h3>
+                    <p>Participación activa en el voluntariado de la PUCV enfocado en la regularización y mejora de redes eléctricas domésticas en sectores vulnerables. Diagnóstico de instalaciones deficientes, reestructuración de circuitos críticos, montaje de canalizaciones y concientización sobre el uso seguro de la energía para prevenir riesgos de siniestros.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>Diseño de Circuitos y Planos Técnicos</h2>
+            <p>Dominio de herramientas de software CAD (como AutoCAD) para la confección de planos eléctricos comerciales y residenciales. Capacidad de estructurar diagramas unilineales, cuadros de carga detallados y plantas de alumbrado/fuerza listos para procesos de tramitación y ejecución en obra.</p>
+            
+            <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; margin-top: 1.5rem; display: flex; flex-wrap: wrap; gap: 2rem; align-items: center;">
+                <div style="flex: 1; min-width: 280px;">
+                    <h4 style="margin-top:0; color: var(--text-color);"><i class="fa-solid fa-file-signature"></i> Competencias Clave en Proyectos:</h4>
+                    <ul style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.8; padding-left: 20px; margin-top: 10px;">
+                        <li>Cálculo preciso de curvas de disparo para disyuntores magnetotérmicos.</li>
+                        <li>Coordinación de protecciones para evitar fallas en cascada.</li>
+                        <li>Diseño de mallas de puesta a tierra y medición de resistividad de terreno.</li>
+                        <li>Estructuración de canalizaciones EMT, PVC y bandejas porta conductores.</li>
+                    </ul>
+                </div>
+                
+                <div class="square-media-container">
+                    <img src="assets/Planos.jpeg" alt="Planta de Alumbrado y Diagrama Unilineal CAD">
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            
+            <div class="footer-brand">
+                <span class="footer-logo">🧑🏽‍💻 Sergio Ruiz Torres</span>
+                <p>Ingeniería Civil Electrónica & Data Engineering. Construyendo soluciones donde el hardware y el software convergen.</p>
+            </div>
+
+            <div class="footer-links">
+                <h4>Navegación</h4>
+                <ul>
+                    <li><a href="index.html#about">Perfil</a></li>
+                    <li><a href="index.html#experience">Experiencia</a></li>
+                    <li><a href="index.html#projects">Portafolio</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-tech">
+                <h4>Tech Stack</h4>
+                <div class="tech-icons-mini">
+                    <i class="fa-brands fa-html5" title="HTML5"></i>
+                    <i class="fa-brands fa-css3-alt" title="CSS3"></i>
+                    <i class="fa-brands fa-js" title="JavaScript"></i>
+                    <i class="fa-brands fa-github" title="GitHub Pages"></i>
+                </div>
+                <p>Desplegado en GitHub Pages © 2026</p>
+            </div>
+
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2026 <a href="https://linktr.ee/SyF_Atelier" target="_blank" class="footer-brand-link">S&F ATELIER</a>. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
