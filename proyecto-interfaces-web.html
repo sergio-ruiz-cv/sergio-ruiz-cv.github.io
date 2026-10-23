@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laboratorio de Interfaces Web & Frontend | Sergio Ruiz Torres</title>
+  <meta name="description" content="Simulador interactivo en vivo de aplicaciones web y landing pages desarrolladas por Sergio Ruiz Torres (@elchicodelasweb). Explora y navega las webs en vivo para PC y móvil." />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ==========================================================================
+       SIMULADOR LIVE IFRAME ENGINE (DESKTOP & MOBILE EMULATOR)
+       ========================================================================== */
+    .browser-stage-container {
+      background: radial-gradient(circle at center, rgba(15, 25, 48, 0.95) 0%, rgba(3, 6, 12, 0.98) 100%);
+      border: 1px solid var(--glass-border-top);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85);
+      margin-bottom: 3.5rem;
+    }
+
+    .project-selector-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--glass-border);
+      margin-bottom: 1.25rem;
+    }
+
+    .project-tabs-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+    }
+
+    .project-tab-btn {
+      padding: 0.62rem 1.2rem;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      color: var(--text-secondary);
+      font-family: var(--font-metric);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.22s ease;
+    }
+
+    .project-tab-btn:hover {
+      color: #ffffff;
+      border-color: var(--feral-mint);
+    }
+
+    .project-tab-btn.active {
+      background: linear-gradient(135deg, var(--feral-mint), var(--feral-cyan));
+      color: #030712;
+      border-color: transparent;
+      box-shadow: 0 0 18px rgba(45, 212, 191, 0.45);
+    }
+
+    .viewport-controls-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .viewport-btn {
+      padding: 0.52rem 0.95rem;
+      border-radius: var(--radius-pill);
+      background: rgba(10, 16, 30, 0.8);
+      border: 1px solid var(--glass-border);
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: all 0.2s ease;
+    }
+
+    .viewport-btn.active,
+    .viewport-btn:hover {
+      background: rgba(45, 212, 191, 0.16);
+      border-color: var(--feral-mint);
+      color: #5eead4;
+    }
+
+    /* Barra del Navegador Emulado */
+    .browser-chrome-bar {
+      height: 46px;
+      background: rgba(18, 28, 52, 0.88);
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+      border: 1px solid var(--glass-border);
+      border-bottom: none;
+      display: flex;
+      align-items: center;
+      padding: 0 1rem;
+      gap: 0.85rem;
+    }
+
+    .window-controls-dots {
+      display: flex;
+      gap: 7px;
+    }
+
+    .window-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+    }
+
+    .dot-close { background: #ef4444; }
+    .dot-minimize { background: #eab308; }
+    .dot-expand { background: #22c55e; }
+
+    .browser-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+    }
+
+    .browser-action-icon {
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .browser-action-icon:hover {
+      color: var(--feral-mint);
+    }
+
+    .browser-url-input {
+      flex: 1;
+      height: 30px;
+      background: rgba(5, 9, 18, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 999px;
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--feral-mint);
+    }
+
+    .browser-url-text {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .browser-url-text i {
+      color: var(--feral-emerald);
+      font-size: 0.72rem;
+    }
+
+    .browser-external-link {
+      color: var(--text-muted);
+      transition: color 0.2s ease;
+      font-size: 0.8rem;
+    }
+
+    .browser-external-link:hover {
+      color: #ffffff;
+    }
+
+    /* Escenario donde corre el Iframe */
+    .viewport-stage {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      background: #020409;
+      border: 1px solid var(--glass-border);
+      border-radius: 0 0 var(--radius-md) var(--radius-md);
+      overflow: hidden;
+      min-height: 720px;
+      position: relative;
+      transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* Modo Desktop (Monitor PC) */
+    .viewport-stage.mode-desktop {
+      padding: 0;
+    }
+
+    .viewport-stage.mode-desktop .live-embedded-frame {
+      width: 100%;
+      height: 740px;
+      border: none;
+      display: block;
+      background: #060912;
+    }
+
+    /* Modo Mobile (Smartphone con chasis y notch) */
+    .viewport-stage.mode-mobile {
+      padding: 2.5rem 1rem;
+      background: radial-gradient(circle at center, #0c1527 0%, #020409 100%);
+    }
+
+    .viewport-stage.mode-mobile .mobile-device-chassis {
+      width: 385px;
+      height: 750px;
+      border-radius: 44px;
+      border: 11px solid #1e293b;
+      box-shadow: 0 25px 75px rgba(0, 0, 0, 0.92), 0 0 32px rgba(45, 212, 191, 0.22);
+      background: #000000;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mobile-speaker-notch {
+      width: 130px;
+      height: 22px;
+      background: #1e293b;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      border-bottom-left-radius: 14px;
+      border-bottom-right-radius: 14px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .speaker-slot {
+      width: 44px;
+      height: 4px;
+      border-radius: 999px;
+      background: #0b1120;
+    }
+
+    .camera-lens {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #0b1120;
+      margin-left: 8px;
+    }
+
+    .viewport-stage.mode-mobile .live-embedded-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      background: #060912;
+      padding-top: 18px;
+    }
+
+    .project-feature-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .feature-stat-item {
+      background: rgba(10, 16, 30, 0.68);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: 1.15rem;
+    }
+
+    .feature-stat-item strong {
+      display: block;
+      font-family: var(--font-metric);
+      font-size: 1rem;
+      color: #ffffff;
+      margin-bottom: 0.25rem;
+    }
+
+    .feature-stat-item p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body id="top">
+  <div class="feral-canvas" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="cinematic-overlay" aria-hidden="true"></div>
+
+  <!-- Navbar Flotante con LinkedIn y CV Drive -->
+  <header class="site-header">
+    <div class="nav-glass">
+      <a href="index.html" class="brand-logo"><span class="brand-dot"></span> SRT<span style="color: var(--feral-mint);">.ENG</span></a>
+      <nav class="main-nav">
+        <a href="index.html#proyectos" class="nav-link">Proyectos</a>
+        <a href="index.html#galeria" class="nav-link">Galería</a>
+        <a href="index.html#curriculum" class="nav-link">Currículum</a>
+        <a href="index.html#certificaciones" class="nav-link">Certificaciones</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="https://cl.linkedin.com/in/sergio-ruiz-torres-2b1864398" target="_blank" rel="noopener noreferrer" class="btn btn-linkedin btn-sm"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+        <a href="https://drive.google.com/file/d/1NDOqKUCmoFVi_YYTsdD74cB_z7mcjdmE/view" target="_blank" rel="noopener noreferrer" class="btn btn-glow btn-sm"><i class="fa-solid fa-file-pdf"></i> CV 1 Plana</a>
+        <a href="index.html" class="btn btn-glass btn-sm"><i class="fa-solid fa-arrow-left"></i> Volver al Hub</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero Editorial de Servicios Web -->
+    <section class="glass-panel tilt-3d section-spacer">
+      <div class="pill-row">
+        <span class="pill pill-cyan"><i class="fa-solid fa-laptop-code"></i> Live Interactive Browser Simulator</span>
+        <span class="pill pill-purple"><i class="fa-brands fa-tiktok"></i> @elchicodelasweb</span>
+        <span class="pill pill-mint"><i class="fa-solid fa-compass"></i> Navegación Real en Vivo</span>
+        <span class="pill pill-amber"><i class="fa-solid fa-mobile-screen"></i> 100% Responsive PC / Celular</span>
+      </div>
+
+      <h1 class="display-title">Diseño Web, <span class="gradient-text">Interfaces &amp; Landing Pages</span></h1>
+      <p class="lead-paragraph">
+        Explora y navega de forma interactiva en mis proyectos de desarrollo frontend y landing pages comerciales. Selecciona cualquiera de las webs, haz scroll dentro del simulador y alterna entre la vista panorámica de <strong>Escritorio (PC)</strong> y el <strong>Chasis de Smartphone</strong> para verificar la adaptabilidad fluida en tiempo real.
+      </p>
+
+      <div class="kpi-bento-4">
+        <article class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-metric gradient-text">100% Live</span>
+            <span class="kpi-icon"><i class="fa-solid fa-play"></i></span>
+          </div>
+          <div class="kpi-label">Navegación Total</div>
+          <p class="kpi-sub">Las páginas corren en vivo en el simulador: puedes interactuar con los menús, leer contenidos y probar su responsividad.</p>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-metric gradient-text">PC + Móvil</span>
+            <span class="kpi-icon"><i class="fa-solid fa-mobile-screen"></i></span>
+          </div>
+          <div class="kpi-label">Simulador Dual</div>
+          <p class="kpi-sub">Alterna al instante entre monitor de escritorio (16:9) y marco de celular táctil con notch para comprobar la ergonomía visual.</p>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-metric gradient-text">UI Luxury</span>
+            <span class="kpi-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+          </div>
+          <div class="kpi-label">Estética Editorial</div>
+          <p class="kpi-sub">Composiciones elegantes inspiradas en diseño cinematográfico, Glassmorphism, tipografías refinadas y paletas de alto impacto.</p>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-metric gradient-text">Conversión</span>
+            <span class="kpi-icon"><i class="fa-brands fa-whatsapp"></i></span>
+          </div>
+          <div class="kpi-label">Orientado a Clientes</div>
+          <p class="kpi-sub">Estructuras diseñadas para cerrar negocios: reservas directas de citas, catálogos B2B y canalización rápida a WhatsApp.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- SIMULADOR INTERACTIVO CON TUS 4 PÁGINAS REALES -->
+    <section class="browser-stage-container" id="live-browser-section">
+      <!-- Selector de Proyectos + Toggle PC / Celular -->
+      <div class="project-selector-toolbar">
+        <div class="project-tabs-group" role="tablist">
+          <button type="button" class="project-tab-btn active" onclick="loadProjectInFrame('mirabilia', this)">
+            <i class="fa-solid fa-sparkles"></i> Mirabilia Studio
+          </button>
+          <button type="button" class="project-tab-btn" onclick="loadProjectInFrame('singular', this)">
+            <i class="fa-solid fa-bolt"></i> Singular Electric
+          </button>
+          <button type="button" class="project-tab-btn" onclick="loadProjectInFrame('syf', this)">
+            <i class="fa-solid fa-couch"></i> S&amp;F Atelier
+          </button>
+          <button type="button" class="project-tab-btn" onclick="loadProjectInFrame('catalina', this)">
+            <i class="fa-solid fa-heart-pulse"></i> Catalina Psicología
+          </button>
+        </div>
+
+        <div class="viewport-controls-group">
+          <button type="button" class="viewport-btn active" id="btn-view-desktop" onclick="setFrameViewport('desktop')">
+            <i class="fa-solid fa-laptop"></i> Modo PC
+          </button>
+          <button type="button" class="viewport-btn" id="btn-view-mobile" onclick="setFrameViewport('mobile')">
+            <i class="fa-solid fa-mobile-screen"></i> Modo Celular
+          </button>
+        </div>
+      </div>
+
+      <!-- Barra del Navegador Emulado con Dominios Comerciales Limpios -->
+      <div class="browser-chrome-bar">
+        <div class="window-controls-dots">
+          <span class="window-dot dot-close"></span>
+          <span class="window-dot dot-minimize"></span>
+          <span class="window-dot dot-expand"></span>
+        </div>
+        <div class="browser-nav-actions">
+          <i class="fa-solid fa-arrow-left browser-action-icon" title="Recargar vista" onclick="reloadLiveFrame()"></i>
+          <i class="fa-solid fa-arrow-right browser-action-icon" title="Avanzar"></i>
+          <i class="fa-solid fa-rotate-right browser-action-icon" title="Recargar página" onclick="reloadLiveFrame()"></i>
+        </div>
+        <div class="browser-url-input">
+          <span class="browser-url-text" id="live-frame-url">
+            <i class="fa-solid fa-lock"></i> https://mirabilia.cl
+          </span>
+          <a href="https://mirabilia-cl.github.io/Inicio/#" id="live-frame-external-btn" target="_blank" rel="noopener noreferrer" class="browser-external-link" title="Abrir página completa en pestaña nueva">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Escenario del Iframe interactivo -->
+      <div class="viewport-stage mode-desktop" id="viewport-stage">
+        <!-- Chasis de Celular con Notch (Activo en Modo Mobile) -->
+        <div class="mobile-device-chassis" id="mobile-chassis" style="display: none;">
+          <div class="mobile-speaker-notch">
+            <div class="speaker-slot"></div>
+            <div class="camera-lens"></div>
+          </div>
+        </div>
+
+        <!-- IFRAME REAL NAVEGABLE -->
+        <iframe 
+          id="live-embedded-frame" 
+          class="live-embedded-frame" 
+          src="https://mirabilia-cl.github.io/Inicio/#" 
+          title="Simulador Web en Vivo — Sergio Ruiz Torres"
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
+        ></iframe>
+      </div>
+
+      <!-- Ficha de Detalles del Proyecto Seleccionado -->
+      <div class="project-feature-strip">
+        <div class="feature-stat-item">
+          <strong id="info-project-name">MIRABILIA | Arquitectura de la Mirada — Lifting &amp; Diseño de Cejas</strong>
+          <p id="info-project-desc">Landing page luxury editorial para estudio boutique de belleza, especializada en tratamientos faciales de alta gama con agendamiento de citas.</p>
+        </div>
+        <div class="feature-stat-item">
+          <strong>Dominio Comercial &amp; Stack</strong>
+          <p id="info-project-stack">mirabilia.cl · HTML5 · CSS3 Gradientes Mesh · Cal.com Booking · WhatsApp Funnel</p>
+        </div>
+        <div class="feature-stat-item">
+          <strong>Propósito &amp; Enfoque</strong>
+          <p id="info-project-goal">Posicionamiento prémium de marca y canalización directa de reservas con confirmación instantánea.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FICHAS COMERCIALES DE LOS 4 PROYECTOS CON IMÁGENES 100% COHERENTES -->
+    <section class="section-spacer">
+      <span class="eyebrow">02 // CLIENTES &amp; PROYECTOS DESARROLLADOS</span>
+      <h2 class="section-title">Portafolio de Páginas &amp; Servicios Frontend</h2>
+
+      <div class="projects-grid">
+        <!-- 1. Mirabilia (Estética, Pestañas & Cejas) -->
+        <article class="glass-panel tilt-3d showcase-card col-span-6">
+          <div>
+            <div class="showcase-visual">
+              <img 
+                src="assets/web_mirabilia.jpg" 
+                onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1000&q=85';" 
+                alt="Mirabilia Lash Lifting y Diseño de Cejas" 
+                class="showcase-media" 
+              />
+              <span class="pill pill-purple"><i class="fa-solid fa-sparkles"></i> mirabilia.cl</span>
+              <span class="pill">Luxury Editorial UI</span>
+            </div>
+            <h3 class="card-heading">MIRABILIA | Arquitectura de la Mirada</h3>
+            <p class="card-body-text">
+              Diseño de identidad digital para estudio de estética facial. Incluye paletas cromáticas suaves, tipografía editorial, catálogo interactivo de servicios (Lash Lifting y Brow Lamination) y botón de agendamiento directo a WhatsApp.
+            </p>
+          </div>
+          <div class="pill-row" style="margin-bottom: 0;">
+            <button type="button" class="btn btn-glow btn-sm" onclick="loadProjectInFrame('mirabilia'); document.getElementById('live-browser-section').scrollIntoView({ behavior: 'smooth' });">
+              <i class="fa-solid fa-play"></i> Probar en el Simulador
+            </button>
+            <a href="https://mirabilia-cl.github.io/Inicio/#" target="_blank" rel="noopener noreferrer" class="btn btn-glass btn-sm">
+              Visitar mirabilia.cl <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+          </div>
+        </article>
+
+        <!-- 2. Singular Electric (Tableros, Potencia & Electricidad) -->
+        <article class="glass-panel tilt-3d showcase-card col-span-6">
+          <div>
+            <div class="showcase-visual">
+              <img 
+                src="assets/web_singular.jpg" 
+                onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=1000&q=85';" 
+                alt="Singular Electric Instalaciones y Tableros Eléctricos SEC" 
+                class="showcase-media" 
+              />
+              <span class="pill pill-amber"><i class="fa-solid fa-bolt"></i> singularelectric.cl</span>
+              <span class="pill">Ingeniería SEC TE1</span>
+            </div>
+            <h3 class="card-heading">Singular Electric ⚡ | Servicios Eléctricos</h3>
+            <p class="card-body-text">
+              Portal corporativo para empresa de ingeniería eléctrica en la Región de Valparaíso. Presenta servicios de regularización TE1 ante la SEC, normalización de tableros TDA, proyectos comerciales y cotizador de emergencias 24/7.
+            </p>
+          </div>
+          <div class="pill-row" style="margin-bottom: 0;">
+            <button type="button" class="btn btn-glow btn-sm" onclick="loadProjectInFrame('singular'); document.getElementById('live-browser-section').scrollIntoView({ behavior: 'smooth' });">
+              <i class="fa-solid fa-play"></i> Probar en el Simulador
+            </button>
+            <a href="https://syf-atelier.github.io/Flash/" target="_blank" rel="noopener noreferrer" class="btn btn-glass btn-sm">
+              Visitar singularelectric.cl <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+          </div>
+        </article>
+
+        <!-- 3. S&F Atelier (Mobiliario de Diseño, Madera & Letreros LED) -->
+        <article class="glass-panel tilt-3d showcase-card col-span-6">
+          <div>
+            <div class="showcase-visual">
+              <img 
+                src="assets/web_syf.jpg" 
+                onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=1000&q=85';" 
+                alt="S&F Atelier Mobiliario a Medida y Letreros LED" 
+                class="showcase-media" 
+              />
+              <span class="pill pill-cyan"><i class="fa-solid fa-couch"></i> syfatelier.cl</span>
+              <span class="pill">CNC Router 3×2m</span>
+            </div>
+            <h3 class="card-heading">S&amp;F Atelier | Corte CNC y Muebles a Medida</h3>
+            <p class="card-body-text">
+              Sitio web oficial del taller mecatrónico en Viña del Mar. Muestra líneas de mobiliario paramétrico con tecnología integrada, fresado de letreros corporativos en acrílico y PVC con luces LED y cotización directa para proyectos de arquitectura.
+            </p>
+          </div>
+          <div class="pill-row" style="margin-bottom: 0;">
+            <button type="button" class="btn btn-glow btn-sm" onclick="loadProjectInFrame('syf'); document.getElementById('live-browser-section').scrollIntoView({ behavior: 'smooth' });">
+              <i class="fa-solid fa-play"></i> Probar en el Simulador
+            </button>
+            <a href="https://syf-atelier.github.io/index.html#inicio" target="_blank" rel="noopener noreferrer" class="btn btn-glass btn-sm">
+              Visitar syfatelier.cl <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+          </div>
+        </article>
+
+        <!-- 4. Catalina Psicóloga Clínica (Consulta Terapéutica & Bienestar) -->
+        <article class="glass-panel tilt-3d showcase-card col-span-6">
+          <div>
+            <div class="showcase-visual">
+              <img 
+                src="assets/web_catalina.jpg" 
+                onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1000&q=85';" 
+                alt="Consulta de Psicoterapia y Psicología Clínica Online" 
+                class="showcase-media" 
+              />
+              <span class="pill pill-mint"><i class="fa-solid fa-heart-pulse"></i> cataterapias.cl</span>
+              <span class="pill">Salud &amp; Terapias Online</span>
+            </div>
+            <h3 class="card-heading">Catalina | Psicóloga Clínica</h3>
+            <p class="card-body-text">
+              Plataforma web para consulta psicológica y psicoterapia online. Diseñada con una atmósfera de contención y serenidad, facilitando a los pacientes conocer el enfoque terapéutico, consultar preguntas frecuentes y coordinar sesiones en línea.
+            </p>
+          </div>
+          <div class="pill-row" style="margin-bottom: 0;">
+            <button type="button" class="btn btn-glow btn-sm" onclick="loadProjectInFrame('catalina'); document.getElementById('live-browser-section').scrollIntoView({ behavior: 'smooth' });">
+              <i class="fa-solid fa-play"></i> Probar en el Simulador
+            </button>
+            <a href="https://cataterapias.github.io/web-inicio/" target="_blank" rel="noopener noreferrer" class="btn btn-glass btn-sm">
+              Visitar cataterapias.cl <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- BANNER DE CONTRATACIÓN FREELANCE -->
+    <section class="glass-panel tilt-3d section-spacer" style="text-align: center; padding: 3.2rem 2rem;">
+      <span class="eyebrow"><i class="fa-solid fa-laptop-code"></i> DESARROLLO WEB FREELANCE (@ELCHICODELASWEB)</span>
+      <h2 class="display-title" style="font-size: clamp(1.8rem, 3.4vw, 2.7rem);">
+        ¿Buscas una web que <span class="gradient-text">destaque a tu negocio</span>?
+      </h2>
+      <p class="lead-paragraph" style="margin: 0 auto 1.8rem;">
+        Desarrollo landing pages de alto impacto visual, portafolios interactivos y sitios comerciales optimizados para retener visitas y convertir clientes en celulares y computadores.
+      </p>
+
+      <div class="pill-row" style="justify-content: center; margin-bottom: 0;">
+        <a href="https://cl.linkedin.com/in/sergio-ruiz-torres-2b1864398" target="_blank" rel="noopener noreferrer" class="btn btn-linkedin">
+          <i class="fa-brands fa-linkedin"></i> Contactar por LinkedIn
+        </a>
+        <a href="https://drive.google.com/file/d/1NDOqKUCmoFVi_YYTsdD74cB_z7mcjdmE/view" target="_blank" rel="noopener noreferrer" class="btn btn-glass">
+          <i class="fa-solid fa-file-pdf"></i> Descargar CV 1 Plana (Drive)
+        </a>
+        <button type="button" class="btn btn-glow" data-copy-email="sergio.ruiz.t@mail.pucv.cl">
+          <i class="fa-regular fa-copy"></i> sergio.ruiz.t@mail.pucv.cl
+        </button>
+      </div>
+    </section>
+
+    <!-- Paginación -->
+    <nav class="pagination-grid">
+      <a href="proyecto-electrica-adexus.html" class="glass-panel tilt-3d">
+        <span class="eyebrow"><i class="fa-solid fa-arrow-left"></i> PROYECTO ANTERIOR</span>
+        <div class="card-heading" style="margin-bottom: 0;">Singular Electric SEC &amp; Adexus</div>
+      </a>
+      <a href="proyecto-fondef-iot.html" class="glass-panel tilt-3d" style="text-align: right;">
+        <span class="eyebrow">SIGUIENTE PROYECTO <i class="fa-solid fa-arrow-right"></i></span>
+        <div class="card-heading" style="margin-bottom: 0;">Invernadero Ciberfísico IoT (FONDEF)</div>
+      </a>
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-flex">
+      <p>© 2026 Sergio Rodrigo Andrés Ruiz Torres · Frontend &amp; Web Development</p>
+      <div style="display: flex; gap: 1.25rem;">
+        <a href="https://cl.linkedin.com/in/sergio-ruiz-torres-2b1864398" target="_blank" rel="noopener noreferrer" style="color: var(--feral-cyan);"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+        <a href="https://drive.google.com/file/d/1NDOqKUCmoFVi_YYTsdD74cB_z7mcjdmE/view" target="_blank" rel="noopener noreferrer" style="color: var(--feral-mint);"><i class="fa-solid fa-file-pdf"></i> CV Drive</a>
+        <a href="#top" style="color: var(--text-secondary);">Subir ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+
+  <!-- CONTROLADOR DEL SIMULADOR LIVE IFRAME CON TUS 4 PÁGINAS -->
+  <script>
+    // Catálogo con las 4 páginas reales y sus dominios comerciales limpios
+    const realLiveProjects = {
+      mirabilia: {
+        name: "MIRABILIA | Arquitectura de la Mirada — Lifting & Diseño de Cejas",
+        desc: "Landing page luxury editorial para estudio boutique de belleza, especializada en tratamientos faciales de alta gama con agendamiento de citas.",
+        stack: "mirabilia.cl · HTML5 · CSS3 Gradientes Mesh · Cal.com Booking · WhatsApp Funnel",
+        goal: "Posicionamiento prémium de marca y canalización directa de reservas con confirmación instantánea.",
+        displayDomain: "https://mirabilia.cl",
+        liveUrl: "https://mirabilia-cl.github.io/Inicio/#"
+      },
+      singular: {
+        name: "Singular Electric ⚡ | Servicios de Ingeniería Eléctrica",
+        desc: "Portal corporativo para empresa de servicios eléctricos autorizados SEC, regularizaciones TE1, mantención y emergencias.",
+        stack: "singularelectric.cl · HTML5 Semántico · CSS3 Dark Mode · Responsive Grid · WhatsApp Funnel",
+        goal: "Generación de prospectos para instalaciones residenciales, comerciales, food trucks y certificaciones SEC TE1.",
+        displayDomain: "https://singularelectric.cl",
+        liveUrl: "https://syf-atelier.github.io/Flash/"
+      },
+      syf: {
+        name: "S&F Atelier | Corte CNC y Muebles a Medida en Viña del Mar",
+        desc: "Sitio web oficial del taller de manufactura con router CNC 3×2m, mobiliario a medida y letreros LED en acrílico y PVC.",
+        stack: "syfatelier.cl · Modelado Paramétrico · Catálogo Interactivo · Glassmorphism · Formulario Directo",
+        goal: "Exhibición de acabados, catálogo B2B y canalización de cotizaciones de corte CNC y mobiliario.",
+        displayDomain: "https://syfatelier.cl",
+        liveUrl: "https://syf-atelier.github.io/index.html#inicio"
+      },
+      catalina: {
+        name: "Catalina | Psicóloga Clínica — Psicoterapia Online",
+        desc: "Plataforma digital para consulta psicológica clínica, facilitando la información de enfoques terapéuticos y agendamiento de sesiones.",
+        stack: "cataterapias.cl · Diseño Terapéutico Sereno · Accesibilidad UI · Integración de Citas Online",
+        goal: "Brindar un espacio web cálido, profesional y seguro para la captación de pacientes de terapia online.",
+        displayDomain: "https://cataterapias.cl",
+        liveUrl: "https://cataterapias.github.io/web-inicio/"
+      }
+    };
+
+    let activeProjectKey = 'mirabilia';
+    let activeViewportMode = 'desktop';
+
+    // Carga la página real en el iframe y actualiza la barra con el dominio comercial limpio
+    function loadProjectInFrame(projectKey, btnElement) {
+      activeProjectKey = projectKey;
+      const data = realLiveProjects[projectKey];
+      if (!data) return;
+
+      // Actualizar pestañas
+      const tabs = document.querySelectorAll('.project-tab-btn');
+      tabs.forEach(tab => tab.classList.remove('active'));
+      if (btnElement) {
+        btnElement.classList.add('active');
+      } else {
+        tabs.forEach(tab => {
+          if (tab.getAttribute('onclick')?.includes(`'${projectKey}'`)) {
+            tab.classList.add('active');
+          }
+        });
+      }
+
+      // Actualizar barra de direcciones con el dominio limpio (ej. singularelectric.cl)
+      document.getElementById('live-frame-url').innerHTML = `<i class="fa-solid fa-lock"></i> ${data.displayDomain}`;
+      document.getElementById('live-frame-external-btn').href = data.liveUrl;
+
+      // Actualizar detalles de la ficha técnica inferior
+      document.getElementById('info-project-name').textContent = data.name;
+      document.getElementById('info-project-desc').textContent = data.desc;
+      document.getElementById('info-project-stack').textContent = data.stack;
+      document.getElementById('info-project-goal').textContent = data.goal;
+
+      // Cargar la URL real dentro del iframe
+      const iframe = document.getElementById('live-embedded-frame');
+      iframe.src = data.liveUrl;
+    }
+
+    // Conmuta entre resolución de PC y marco de celular táctil
+    function setFrameViewport(mode) {
+      activeViewportMode = mode;
+      const stage = document.getElementById('viewport-stage');
+      const mobileChassis = document.getElementById('mobile-chassis');
+      const iframe = document.getElementById('live-embedded-frame');
+      const btnDesktop = document.getElementById('btn-view-desktop');
+      const btnMobile = document.getElementById('btn-view-mobile');
+
+      if (mode === 'mobile') {
+        stage.className = 'viewport-stage mode-mobile';
+        btnDesktop.classList.remove('active');
+        btnMobile.classList.add('active');
+        mobileChassis.style.display = 'flex';
+        // Mover el iframe dentro del chasis del smartphone
+        mobileChassis.appendChild(iframe);
+      } else {
+        stage.className = 'viewport-stage mode-desktop';
+        btnMobile.classList.remove('active');
+        btnDesktop.classList.add('active');
+        mobileChassis.style.display = 'none';
+        // Regresar el iframe al modo panorámico de escritorio
+        stage.appendChild(iframe);
+      }
+    }
+
+    function reloadLiveFrame() {
+      const iframe = document.getElementById('live-embedded-frame');
+      const data = realLiveProjects[activeProjectKey];
+      if (data && iframe) {
+        iframe.src = data.liveUrl;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Iniciar con Mirabilia cargada en el iframe
+      loadProjectInFrame('mirabilia', document.querySelector('.project-tab-btn.active'));
+    });
+  </script>
+</body>
+</html>
